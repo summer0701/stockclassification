@@ -483,79 +483,83 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 	
 	j = 0
 	
-	# Chart WORKSHEET	
-	#chart = workbook.add_chart({'type':'line'})
-	#chart.add_series({
-	#				'categories':'=cashflow!$B$1:$Q$1',
-	#				'name':'=cashflow!A2',
-	#				'values':'=cashflow!$B$2:$Q$2',
-	#				'marker':{'type': 'diamond'}
-	#				})
-	#chart.add_series({
-	#				'name':'=cashflow!A4',
-	#				'values':'=cashflow!$B$4:$Q$4',
-	#				'marker':{'type': 'diamond'}
-	#				})
-	#chart.add_series({
-	#				'name':'=cashflow!A26',
-	#				'values':'=cashflow!$B$26:$Q$26',
-	#				'marker':{'type': 'diamond'}
-	#				})
-	#chart.set_legend({'font':{'bold':1}})
-	#chart.set_x_axis({'name':"결산년도"})
-	#chart.set_y_axis({'name':"단위:억원"})
-	#chart.set_title({'name':corp})
+	#Chart WORKSHEET
+	chart = workbook.add_chart({'type':'line'})
+	chart.add_series({
+					'categories':'=cashflow!$B$1:$Q$1',
+					'name':'=cashflow!A2',
+					'values':'=cashflow!$B$2:$Q$2',
+					'marker':{'type': 'diamond'}
+					})
+	chart.add_series({
+					'name':'=cashflow!A4',
+					'values':'=cashflow!$B$4:$Q$4',
+					'marker':{'type': 'diamond'}
+					})
+	chart.add_series({
+					'name':'=cashflow!A26',
+					'values':'=cashflow!$B$26:$Q$26',
+					'marker':{'type': 'diamond'}
+					})
+	chart.set_legend({'font':{'bold':1}})
+	chart.set_x_axis({'name':"결산년도"})
+	chart.set_y_axis({'name':"단위:억원"})
+	chart.set_title({'name':corp})
 
-	#worksheet_cashflow.insert_chart('C30', chart)
+	worksheet_cashflow.insert_chart('C30', chart)
+	try:
+		old_year = cashflow_list[0]['year']
 
-	old_year = cashflow_list[0]['year']
 
-	if (stock_code != ""):
-		yf.pdr_override()
-		start_date = str(old_year)+'-01-01'
-		if stock_cat == "코스피":
-			ticker = stock_code+'.KS'
-		else:
-			ticker = stock_code+'.KQ'
 
-		print("ticker", ticker)
-		print("start date", start_date)
-		stock_read = pandas_datareader.data.get_data_yahoo(ticker, start_date)
-		stock_close = stock_read['Close'].values
-		stock_datetime64 = stock_read.index.values
+		if (stock_code != ""):
+			#yf.pdr_override()
+			start_date = str(old_year)+'-01-01'
+			if stock_cat == "코스피":
+				ticker = stock_code+'.KS'
+			else:
+				ticker = stock_code+'.KQ'
 
-		stock_date = []
+			print("ticker", ticker)
+			print("start date", start_date)
+			stock_read = pandas_datareader.data.get_data_yahoo(ticker, start_date)
+			stock_close = stock_read['Close'].values
+			stock_datetime64 = stock_read.index.values
 
-		for date in stock_datetime64:
-			unix_epoch = np.datetime64(0, 's')
-			one_second = np.timedelta64(1, 's')
-			seconds_since_epoch = (date - unix_epoch) / one_second
-			
-			day = datetime.utcfromtimestamp(seconds_since_epoch)
-			stock_date.append(day.strftime('%Y-%m-%d'))
+			stock_date = []
 
-		worksheet_stock = workbook.add_worksheet('stock_chart')
+			for date in stock_datetime64:
+				unix_epoch = np.datetime64(0, 's')
+				one_second = np.timedelta64(1, 's')
+				seconds_since_epoch = (date - unix_epoch) / one_second
 
-		worksheet_stock.write(0, 0, "date")
-		worksheet_stock.write(0, 1, "Close")
-		
-		for i in range(len(stock_close)):
-			worksheet_stock.write(i+1, 0, stock_date[i])
-			worksheet_stock.write(i+1, 1, stock_close[i])
-		
-		chart = workbook.add_chart({'type':'line'})
-		chart.add_series({
-						'categories':'=stock_chart!$A$2:$A$'+str(len(stock_close)+1),
-						'name':'=stock_chart!B1',
-						'values':'=stock_chart!$B$2:$B$'+str(len(stock_close)+1)
-						})
+				day = datetime.utcfromtimestamp(seconds_since_epoch)
+				stock_date.append(day.strftime('%Y-%m-%d'))
 
-		worksheet_stock.insert_chart('D3', chart)
+			worksheet_stock = workbook.add_worksheet('stock_chart')
+
+			worksheet_stock.write(0, 0, "date")
+			worksheet_stock.write(0, 1, "Close")
+
+			for i in range(len(stock_close)):
+				worksheet_stock.write(i+1, 0, stock_date[i])
+				worksheet_stock.write(i+1, 1, stock_close[i])
+
+			chart = workbook.add_chart({'type':'line'})
+			chart.add_series({
+							'categories':'=stock_chart!$A$2:$A$'+str(len(stock_close)+1),
+							'name':'=stock_chart!B1',
+							'values':'=stock_chart!$B$2:$B$'+str(len(stock_close)+1)
+							})
+
+			worksheet_stock.insert_chart('D3', chart)
+	except:
+		print("none data")
 
 	workbook.close()
 	# Deactivate
-	draw_cashflow_figure(income_list, income_list2, year_list, op_cashflow_list, fcf_list, div_list, stock_close)
-	draw_corp_history(year_list, asset_sum_list, liability_sum_list, equity_sum_list, sales_list, op_income_list, net_income_list)
+	#draw_cashflow_figure(income_list, income_list2, year_list, op_cashflow_list, fcf_list, div_list, stock_close)
+	#draw_corp_history(year_list, asset_sum_list, liability_sum_list, equity_sum_list, sales_list, op_income_list, net_income_list)
 
 # Get information of balance sheet
 def scrape_balance_sheet(balance_sheet_table, year, unit):
@@ -1277,24 +1281,24 @@ def main():
 	except getopt.GetoptError as err:
 		print(err)
 		sys.exit(2)
-	for option, argument in opts:
-		if option == "-h" or option == "--help":
-			help_msg = """
-================================================================================
--c or --corp <name>     :  Corporation name
--o or --output <name>	:  Output file name
--h or --help            :  Show help messages
-
-<Example>
->> python dart_financial_statement.py -c S-Oil
-================================================================================
-					"""
-			print(help_msg)
-			sys.exit(2)
-		elif option == "--corp" or option == "-c":
-			corp = argument
-		elif option == "--output" or option == "-o":
-			workbook_name = argument + ".xlsx"
+# 	for option, argument in opts:
+# 		if option == "-h" or option == "--help":
+# 			help_msg = """
+# ================================================================================
+# -c or --corp <name>     :  Corporation name
+# -o or --output <name>	:  Output file name
+# -h or --help            :  Show help messages
+#
+# <Example>
+# >> python dart_financial_statement.py -c S-Oil
+# ================================================================================
+# 					"""
+# 			print(help_msg)
+# 			sys.exit(2)
+# 		elif option == "--corp" or option == "-c":
+# 			corp = argument
+# 		elif option == "--output" or option == "-o":
+# 			workbook_name = argument + ".xlsx"
 
 	re_income_find = re.compile("법[ \s]*인[ \s]*세[ \s]*비[ \s]*용(\(이익\))*[ \s]*차[ \s]*감[ \s]*전[ \s]*순[ \s]*((이[ \s]*익)|(손[ \s]*실))|법[ \s]*인[ \s]*세[ \s]*차[ \s]*감[ \s]*전[ \s]*계[ \s]*속[ \s]*영[ \s]*업[ \s]*순[ \s]*이[ \s]*익|법인세[ \s]*차감전[ \s]*순이익|법인세차감전계속영업이익|법인세비용차감전이익|법인세비용차감전계속영업[순]*이익|법인세비용차감전당기순이익|법인세(비용차감|손익가감)전순이익|법인세비용차감전[ \s]*계속사업이익|법인세비용차감전순손익")
 	re_cashflow_find = re.compile("영업활동[ \s]*현금[ \s]*흐름|영업활동으로[ \s]*인한[ \s]*[순]*현금[ \s]*흐름|영업활동으로부터의[ \s]*현금흐름|영업활동으로 인한 자산부채의 변동")
@@ -1321,150 +1325,121 @@ def main():
 		stock_num_list.append(sheet1.cell(i+1,2).value)
 		stock_url_list.append(sheet1.cell(i+1,3).value)
 
-	find_index = stock_name_list.index(corp)
+#	find_index = stock_name_list.index(corp)
 
-	stock_code = ""
+#	stock_code = ""
 
-	if find_index != -1:
-		stock_code = stock_num_list[find_index]
-		stock_cat = stock_cat_list[find_index]
-	else:
-		print("STOCK CODE ERROR")
+#	if find_index != -1:
+#		stock_code = stock_num_list[find_index]
+#		stock_cat = stock_cat_list[find_index]
+#	else:
+#		print("STOCK CODE ERROR")
 
-	# URL
-	#url_templete = "http://dart.fss.or.kr/dsab002/search.ax?reportName=%s&&maxResults=100&&textCrpNm=%s"
-	url_templete = "http://dart.fss.or.kr/dsab002/search.ax?reportName=%s&&maxResults=100&&textCrpNm=%s&&startDate=%s&&endDate=%s"
-	headers = {'Cookie':'DSAB002_MAXRESULTS=5000;'}
-	
-	dart_post_list = []
-	cashflow_list = []
-	balance_sheet_list = []
-	income_statement_list = []
-	
-	year = 2017
-	start_day = datetime(2005,1,1)
-	#start_day = datetime(2000,1,1)
-	#end_day = datetime(2002,11,15)
-	end_day = datetime(2017,11,15)
-	delta = end_day - start_day
+	for i in range(num_stock):
+		stock_cat = stock_cat_list[i]
+		stock_code = stock_num_list[i]
+		corp = stock_num_list[i]
+		workbook_name = "sands/" + stock_num_list[i] + ".xlsx"
+		# URL
+		#url_templete = "http://dart.fss.or.kr/dsab002/search.ax?reportName=%s&&maxResults=100&&textCrpNm=%s"
+		url_templete = "http://dart.fss.or.kr/dsab002/search.ax?reportName=%s&&maxResults=100&&textCrpNm=%s&&startDate=%s&&endDate=%s"
+		headers = {'Cookie':'DSAB002_MAXRESULTS=5000;'}
 
-	# 사업보고서
-	report = "%EC%82%AC%EC%97%85%EB%B3%B4%EA%B3%A0%EC%84%9C"
-	# 분기보고서
-	report2 = "%EB%B6%84%EA%B8%B0%EB%B3%B4%EA%B3%A0%EC%84%9C" 
-	start_day2 = datetime(2017,10,15)
-	end_day2 = datetime(2017,11,17)
+		dart_post_list = []
+		cashflow_list = []
+		balance_sheet_list = []
+		income_statement_list = []
+
+		now = datetime.now()
+		year = 2019
+		start_day = datetime(2005,1,1)
+		end_day = datetime(now.year,now.month,1)
+		delta = end_day - start_day
+
+		# 사업보고서
+		report = "%EC%82%AC%EC%97%85%EB%B3%B4%EA%B3%A0%EC%84%9C"
+		# 분기보고서
+		report2 = "%EB%B6%84%EA%B8%B0%EB%B3%B4%EA%B3%A0%EC%84%9C"
+		start_day2 = datetime(now.year, now.month-3, 1)
+		end_day2 = datetime(now.year, now.month, 1)
 
 
-	# 최신 분기보고서 읽기
-	handle = urllib.request.urlopen(url_templete % (report2, urllib.parse.quote(corp), start_day2.strftime('%Y%m%d'), end_day2.strftime('%Y%m%d')))
+		# 최신 분기보고서 읽기
+		handle = urllib.request.urlopen(url_templete % (report2, urllib.parse.quote(stock_num_list[i]), start_day2.strftime('%Y%m%d'), end_day2.strftime('%Y%m%d')))
 
-	data = handle.read()
-	soup = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
-	
-	table = soup.find('table')
-	trs = table.findAll('tr')
-	tds = table.findAll('td')
-	counts = len(tds)
-	
-	if counts > 2:
-		# Delay operation
-		#time.sleep(20)
-	
-		link_list = []
-		date_list = []
-		corp_list = []
-		market_list = []
-		title_list = []
-		reporter_list = []
-
-		# recent report
-		tr = trs[1]
-		time.sleep(2)
-		tds = tr.findAll('td')
-		link = 'http://dart.fss.or.kr' + tds[2].a['href']
-		date = tds[4].text.strip().replace('.', '-')
-		corp_name = tds[1].text.strip()
-		market = tds[1].img['title']
-		title = " ".join(tds[2].text.split())
-		reporter = tds[3].text.strip()
-
-		link_list.append(link)
-		date_list.append(date)
-		corp_list.append(corp_name)
-		market_list.append(market)
-		title_list.append(title)
-		reporter_list.append(reporter)
-	
-		dart_post_sublist = []
-
-		year = int(date[0:4])
-		print(corp_name)
-		print(title)
-		print(date)
-		handle = urllib.request.urlopen(link)
 		data = handle.read()
-		soup2 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
-		print(link)
-		
-		head_lines = soup2.find('head').text.split("\n")
-		#print(head_lines)
-		re_tree_find1 = re.compile("2.[ ]*연결재무제표")
-		re_tree_find1_bak = re.compile("4.[ ]*재무제표")
-		line_num = 0
-		line_find = 0
-		for head_line in head_lines:
-			#print(head_line)
-			if (re_tree_find1.search(head_line)):
-				line_find = line_num
-				break
-			line_num = line_num + 1
-		
-		line_num = 0
-		line_find_bak = 0
-		for head_line in head_lines:
-			if (re_tree_find1_bak.search(head_line)):
-				line_find_bak = line_num
-				break
-			line_num = line_num + 1
+		soup = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
 
+		table = soup.find('table')
+		trs = table.findAll('tr')
+		tds = table.findAll('td')
+		counts = len(tds)
 
-		if(line_find != 0):
-		
-			line_words = head_lines[line_find+4].split("'")
-			#print(line_words)
-			rcpNo = line_words[1]
-			dcmNo = line_words[3]
-			eleId = line_words[5]
-			offset = line_words[7]
-			length = line_words[9]
+		if counts > 2:
+			# Delay operation
+			#time.sleep(20)
 
-			dart = soup2.find_all(string=re.compile('dart.dtd'))
-			dart2 = soup2.find_all(string=re.compile('dart2.dtd'))
-			dart3 = soup2.find_all(string=re.compile('dart3.xsd'))
+			link_list = []
+			date_list = []
+			corp_list = []
+			market_list = []
+			title_list = []
+			reporter_list = []
 
-			if len(dart3) != 0:
-				link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart3.xsd"
-			elif len(dart2) != 0:
-				link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart2.dtd"
-			elif len(dart) != 0:
-				link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart.dtd"
-			else:
-				link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"  
-			
-			print(link2)
+			# recent report
+			tr = trs[1]
+			time.sleep(2)
+			tds = tr.findAll('td')
+			link = 'http://dart.fss.or.kr' + tds[2].a['href']
+			date = tds[4].text.strip().replace('.', '-')
+			corp_name = tds[1].text.strip()
+			market = tds[1].img['title']
+			title = " ".join(tds[2].text.split())
+			reporter = tds[3].text.strip()
 
-			#try:
-			handle = urllib.request.urlopen(link2)
-			print(handle)
+			link_list.append(link)
+			date_list.append(date)
+			corp_list.append(corp_name)
+			market_list.append(market)
+			title_list.append(title)
+			reporter_list.append(reporter)
+
+			dart_post_sublist = []
+
+			year = int(date[0:4])
+			print(corp_name)
+			print(title)
+			print(date)
+			handle = urllib.request.urlopen(link)
 			data = handle.read()
-			soup3 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+			soup2 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+			print(link)
 
-			tables = soup3.findAll("table")
+			head_lines = soup2.find('head').text.split("\n")
+			#print(head_lines)
+			re_tree_find1 = re.compile("2.[ ]*연결재무제표")
+			re_tree_find1_bak = re.compile("4.[ ]*재무제표")
+			line_num = 0
+			line_find = 0
+			for head_line in head_lines:
+				#print(head_line)
+				if (re_tree_find1.search(head_line)):
+					line_find = line_num
+					break
+				line_num = line_num + 1
 
-			# 2. 연결재무제표가 비어 있는 경우
-			if (len(tables) == 0):
-				line_words = head_lines[line_find_bak+4].split("'")
+			line_num = 0
+			line_find_bak = 0
+			for head_line in head_lines:
+				if (re_tree_find1_bak.search(head_line)):
+					line_find_bak = line_num
+					break
+				line_num = line_num + 1
+
+
+			if(line_find != 0):
+
+				line_words = head_lines[line_find+4].split("'")
 				#print(line_words)
 				rcpNo = line_words[1]
 				dcmNo = line_words[3]
@@ -1483,322 +1458,31 @@ def main():
 				elif len(dart) != 0:
 					link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart.dtd"
 				else:
-					link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"  
-				
+					link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"
+
 				print(link2)
-				
+
+				#try:
 				handle = urllib.request.urlopen(link2)
 				print(handle)
 				data = handle.read()
 				soup3 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+
 				tables = soup3.findAll("table")
 
-			cnt = 0
-			table_num = 0
-
-			for table in tables:
-				if (re_cashflow_find.search(table.text)):
-					table_num = cnt
-					break
-				cnt = cnt + 1
-			
-			print("table_num", table_num, "Tables", len(tables))
-			cashflow_table = soup3.findAll("table")[table_num]
-			
-			cnt = 0
-			table_income_num = 0
-			for table in tables:
-				if (re_income_find.search(table.text)):
-					table_income_num = cnt
-					break
-				cnt = cnt + 1
-			income_table = soup3.findAll("table")[table_income_num]
-			#print("table_income_num", table_income_num, "Tables", len(tables))
-			
-			cnt = 0
-			table_balance_num = 0
-			for table in tables:
-				if (re_balance_sheet_find.search(table.text)):
-					table_balance_num = cnt
-					break
-				cnt = cnt + 1
-			balance_table = soup3.findAll("table")[table_balance_num]
-			print("table_balance_num", table_balance_num, "Tables", len(tables))
-			
-			unit = 100.0
-			unit_find = 0
-			re_unit1 = re.compile('단위[ \s]*:[ \s]*원')
-			re_unit2 = re.compile('단위[ \s]*:[ \s]*백만원')
-			re_unit3 = re.compile('단위[ \s]*:[ \s]*천원')
-
-			# 원
-			if len(soup3.findAll("table")[table_num-1](string=re_unit1)) != 0:
-				unit = 100000000.0
-				unit_find = 1
-				#print("Unit ###1")
-			# 백만원
-			elif len(soup3.findAll("table")[table_num-1](string=re_unit2)) != 0:
-				unit = 100.0
-				unit_find = 1
-				#print("Unit ###2")
-			elif len(soup3.findAll("table")[table_num-1](string=re_unit3)) != 0:
-				unit = 100000.0
-				unit_find = 1
-				#print("Unit ###3")
-
-			if unit_find == 0:
-				print ("UNIT NOT FOUND")
-				if len(soup3.findAll(string=re_unit1)) != 0:
-					print("Unit ###1")
-					unit = 100000000.0
-				elif len(soup3.findAll(string=re_unit2)) != 0:
-					print("Unit ###2")
-					unit = 100.0
-				elif len(soup3.findAll(string=re_unit3)) != 0:
-					print("Unit ###3")
-					unit = 100000.0
-			
-			cashflow_sub_list = scrape_cashflows(cashflow_table, 2017, unit)
-			income_statement_sub_list = scrape_income_statement(income_table, 2017, unit, 1)
-			balance_sheet_sub_list = scrape_balance_sheet(balance_table, 2017, unit)
-			
-			cashflow_sub_list['net_income'] = income_statement_sub_list['net_income']
-
-		## if(line_find != 0):
-		else:
-			print("FINDING LINE NUMBER ERROR")
-			cashflow_sub_list = {}
-			
-			cashflow_sub_list['year']				= 2017
-			cashflow_sub_list['op_cashflow']		= 0.0
-			cashflow_sub_list['op_cashflow_sub1']	= "FINDING LINE NUMBER ERROR"
-			cashflow_sub_list['op_cashflow_sub2']	= 0.0
-
-			cashflow_sub_list['invest_cashflow']		= 0.0
-			cashflow_sub_list['invest_cashflow_sub1']	= 0.0
-			cashflow_sub_list['invest_cashflow_sub2'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub3'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub4'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub5'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub6'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub7'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub8'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub9'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub10']	= 0.0
-			cashflow_sub_list['invest_cashflow_sub11'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub12'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub13'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub14'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub15'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub16'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub17'] 	= 0.0
-			cashflow_sub_list['invest_cashflow_sub18'] 	= 0.0
-			
-			cashflow_sub_list['fin_cashflow']		= 0.0
-			cashflow_sub_list['fin_cashflow_sub1']	= 0.0
-			cashflow_sub_list['fin_cashflow_sub2'] 	= 0.0
-			cashflow_sub_list['fin_cashflow_sub3'] 	= 0.0
-
-			cashflow_sub_list['start_cash']		= 0.0
-			cashflow_sub_list['end_cash']		= 0.0
-			cashflow_sub_list['net_income']		= 0.0
-			
-			#print(cashflow_sub_list)
-
-			balance_sheet_sub_list = {}
-			balance_sheet_sub_list['year']						=	2017
-			balance_sheet_sub_list["asset_current"]				=	0.0
-			balance_sheet_sub_list["asset_current_sub1"]		=	"FINDING LINE NUMBER ERROR"
-			balance_sheet_sub_list["asset_current_sub2"]		=	0.0
-			balance_sheet_sub_list["asset_current_sub3"]		=	0.0
-			balance_sheet_sub_list["asset_non_current"]			=	0.0
-			balance_sheet_sub_list["asset_non_current_sub1"]	=	0.0
-			balance_sheet_sub_list["asset_non_current_sub2"]	=	0.0
-			balance_sheet_sub_list["asset_sum"]					=	0.0
-			balance_sheet_sub_list["liability_current"]				=	0.0
-			balance_sheet_sub_list["liability_current_sub1"]		=	0.0
-			balance_sheet_sub_list["liability_current_sub2"]		=	0.0
-			balance_sheet_sub_list["liability_current_sub3"]		=	0.0
-			balance_sheet_sub_list["liability_non_current"]			=	0.0
-			balance_sheet_sub_list["liability_non_current_sub1"]	=	0.0
-			balance_sheet_sub_list["liability_non_current_sub2"]	=	0.0
-			balance_sheet_sub_list["liability_non_current_sub3"]	=	0.0
-			balance_sheet_sub_list["liability_non_current_sub4"]	=	0.0
-			balance_sheet_sub_list["liability_sum"]					=	0.0
-			balance_sheet_sub_list["equity"]						=	0.0
-			balance_sheet_sub_list["equity_sub1"]					=	0.0
-			balance_sheet_sub_list["equity_sub3"]					=	0.0
-			balance_sheet_sub_list["equity_sub2"]					=	0.0
-			balance_sheet_sub_list["equity_sum"]					=	0.0
-					
-			income_statement_sub_list = {}
-			income_statement_sub_list['year']				=	2017
-			income_statement_sub_list["sales"]				=	0.0
-			income_statement_sub_list["sales_sub1"]			=	"FINDING LINE NUMBER ERROR"
-			income_statement_sub_list["sales_sub2"]			=	0.0
-			income_statement_sub_list["sales_sub3"]			=	0.0
-			income_statement_sub_list["sales2"]				=	0.0
-			income_statement_sub_list["sales2_sub1"]		=	0.0
-			income_statement_sub_list["op_income"]		 	=	0.0
-			income_statement_sub_list["op_income_sub1"]		=	0.0
-			income_statement_sub_list["op_income_sub2"]		=	0.0
-			income_statement_sub_list["op_income_sub3"]		=	0.0
-			income_statement_sub_list["op_income_sub4"]		=	0.0
-			income_statement_sub_list["op_income_sub5"]		=	0.0
-			income_statement_sub_list["op_income_sub6"]		=	0.0
-			income_statement_sub_list["op_income_sub7"]		=	0.0
-			income_statement_sub_list["tax"]				=	0.0
-			income_statement_sub_list["net_income"]			=	0.0
-			income_statement_sub_list["eps"]				=	0.0
-
-		dart_post_sublist.append(date)
-		dart_post_sublist.append(corp_name)
-		dart_post_sublist.append(market)
-		dart_post_sublist.append(title)
-		dart_post_sublist.append(link)
-			
-		dart_post_list.append(dart_post_sublist)
-		cashflow_list.append(cashflow_sub_list)
-		balance_sheet_list.append(balance_sheet_sub_list)
-		income_statement_list.append(income_statement_sub_list)
-
-	#handle = urllib.request.urlopen(url_templete % (report, urllib.parse.quote(corp)))
-	#print("URL" + url_templete % (report, corp))
-	handle = urllib.request.urlopen(url_templete % (report, urllib.parse.quote(corp), start_day.strftime('%Y%m%d'), end_day.strftime('%Y%m%d')))
-	print("URL" + url_templete % (report, corp, start_day.strftime('%Y%m%d'), end_day.strftime('%Y%m%d')))
-
-	data = handle.read()
-	soup = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
-	
-	table = soup.find('table')
-	trs = table.findAll('tr')
-	tds = table.findAll('td')
-	counts = len(tds)
-	#print(counts)
-
-	#if counts > 0:
-	if counts > 2:
-		# Delay operation
-		time.sleep(20)
-	
-		link_list = []
-		date_list = []
-		corp_list = []
-		market_list = []
-		title_list = []
-		reporter_list = []
-		tr_cnt = 0
-		
-		for tr in trs[1:]:
-			tr_cnt = tr_cnt + 1
-			time.sleep(2)
-			tds = tr.findAll('td')
-			link = 'http://dart.fss.or.kr' + tds[2].a['href']
-			date = tds[4].text.strip().replace('.', '-')
-			corp_name = tds[1].text.strip()
-			market = tds[1].img['title']
-			title = " ".join(tds[2].text.split())
-			reporter = tds[3].text.strip()
-
-			re_pass = re.compile("해외증권거래소등에신고한사업보고서등의국내신고")
-			if (not re_pass.search(title)):
-				link_list.append(link)
-				date_list.append(date)
-				corp_list.append(corp_name)
-				market_list.append(market)
-				title_list.append(title)
-				reporter_list.append(reporter)
-
-				dart_post_sublist = []
-
-				year = int(date[0:4])
-				print(corp_name)
-				print(title)
-				print(date)
-				handle = urllib.request.urlopen(link)
-				#print(link)
-				data = handle.read()
-				soup2 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
-				#print(soup2)
-				
-				#print(type(soup2.find('head').text))
-				head_lines = soup2.find('head').text.split("\n")
-				#print(head_words)
-
-				# From 2015 ~ now
-				#if (year>2014):
-				#	re_tree_find = re.compile("2. 연결재무제표")
-				## From 2010 to 2014
-				#elif (year>2009):
-				#	re_tree_find = re.compile("재무제표 등")
-				## From 2008 to 2009
-				#elif (year>2007):
-				#	re_tree_find = re.compile("1. 연결재무제표에 관한 사항")
-				## From 2002 to 2007
-				#elif (year>2001):
-				#	re_tree_find = re.compile("4. 재무제표")
-				#else:
-				#	re_tree_find = re.compile("3. 재무제표")
-
-				re_tree_find1 = re.compile("2. 연결재무제표")
-				re_tree_find2 = re.compile("재무제표 등")
-				re_tree_find3 = re.compile("1. 연결재무제표에 관한 사항")
-				re_tree_find4 = re.compile("4. 재무제표")
-				re_tree_find5 = re.compile("3. 재무제표")
-				
-				re_tree_find1_bak = re.compile("4.[ ]*재무제표")
-				
-				line_num = 0
-				line_find = 0
-				for head_line in head_lines:
-					if (re_tree_find1.search(head_line)):
-						line_find = line_num
-						break
-						#print(head_line)
-					elif (re_tree_find2.search(head_line)):
-						line_find = line_num
-						break
-					elif (re_tree_find3.search(head_line)):
-						line_find = line_num
-						break
-					elif (re_tree_find4.search(head_line)):
-						line_find = line_num
-						break
-					elif (re_tree_find5.search(head_line)):
-						line_find = line_num
-						break
-					line_num = line_num + 1
-
-				line_num = 0
-				line_find_bak = 0
-				for head_line in head_lines:
-					if (re_tree_find1_bak.search(head_line)):
-						line_find_bak = line_num
-						break
-					line_num = line_num + 1
-
-
-				if(line_find != 0):
-		
-					#print(head_lines[line_find])
-					#print(head_lines[line_find+1])
-					#print(head_lines[line_find+2])
-					#print(head_lines[line_find+3])
-					#print(head_lines[line_find+4])
-
-					line_words = head_lines[line_find+4].split("'")
+				# 2. 연결재무제표가 비어 있는 경우
+				if (len(tables) == 0):
+					line_words = head_lines[line_find_bak+4].split("'")
 					#print(line_words)
-					rcpNo = line_words[1]
+					try:
+						rcpNo = line_words[1]
+					except:
+						continue
 					dcmNo = line_words[3]
 					eleId = line_words[5]
 					offset = line_words[7]
 					length = line_words[9]
 
-					#test = soup2.find('a', {'href' : '#download'})['onclick']
-					#words = test.split("'")
-					#rcpNo = words[1]
-					#dcmNo = words[3]
-					
 					dart = soup2.find_all(string=re.compile('dart.dtd'))
 					dart2 = soup2.find_all(string=re.compile('dart2.dtd'))
 					dart3 = soup2.find_all(string=re.compile('dart3.xsd'))
@@ -1810,28 +1494,321 @@ def main():
 					elif len(dart) != 0:
 						link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart.dtd"
 					else:
-						link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"  
-					
+						link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"
+
 					print(link2)
 
-					#try:
 					handle = urllib.request.urlopen(link2)
-					#print(handle)
+					print(handle)
 					data = handle.read()
 					soup3 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
-					#print(soup3)
-
 					tables = soup3.findAll("table")
-			
-					# 2. 연결재무제표가 비어 있는 경우
-					if (len(tables) == 0):
-						line_words = head_lines[line_find_bak+4].split("'")
+
+				cnt = 0
+				table_num = 0
+
+				for table in tables:
+					if (re_cashflow_find.search(table.text)):
+						table_num = cnt
+						break
+					cnt = cnt + 1
+
+				print("table_num", table_num, "Tables", len(tables))
+				cashflow_table = soup3.findAll("table")[table_num]
+
+				cnt = 0
+				table_income_num = 0
+				for table in tables:
+					if (re_income_find.search(table.text)):
+						table_income_num = cnt
+						break
+					cnt = cnt + 1
+				income_table = soup3.findAll("table")[table_income_num]
+				#print("table_income_num", table_income_num, "Tables", len(tables))
+
+				cnt = 0
+				table_balance_num = 0
+				for table in tables:
+					if (re_balance_sheet_find.search(table.text)):
+						table_balance_num = cnt
+						break
+					cnt = cnt + 1
+				balance_table = soup3.findAll("table")[table_balance_num]
+				print("table_balance_num", table_balance_num, "Tables", len(tables))
+
+				unit = 100.0
+				unit_find = 0
+				re_unit1 = re.compile('단위[ \s]*:[ \s]*원')
+				re_unit2 = re.compile('단위[ \s]*:[ \s]*백만원')
+				re_unit3 = re.compile('단위[ \s]*:[ \s]*천원')
+
+				# 원
+				if len(soup3.findAll("table")[table_num-1](string=re_unit1)) != 0:
+					unit = 100000000.0
+					unit_find = 1
+					#print("Unit ###1")
+				# 백만원
+				elif len(soup3.findAll("table")[table_num-1](string=re_unit2)) != 0:
+					unit = 100.0
+					unit_find = 1
+					#print("Unit ###2")
+				elif len(soup3.findAll("table")[table_num-1](string=re_unit3)) != 0:
+					unit = 100000.0
+					unit_find = 1
+					#print("Unit ###3")
+
+				if unit_find == 0:
+					print ("UNIT NOT FOUND")
+					if len(soup3.findAll(string=re_unit1)) != 0:
+						print("Unit ###1")
+						unit = 100000000.0
+					elif len(soup3.findAll(string=re_unit2)) != 0:
+						print("Unit ###2")
+						unit = 100.0
+					elif len(soup3.findAll(string=re_unit3)) != 0:
+						print("Unit ###3")
+						unit = 100000.0
+
+				cashflow_sub_list = scrape_cashflows(cashflow_table, 2017, unit)
+				income_statement_sub_list = scrape_income_statement(income_table, 2017, unit, 1)
+				balance_sheet_sub_list = scrape_balance_sheet(balance_table, 2017, unit)
+
+				cashflow_sub_list['net_income'] = income_statement_sub_list['net_income']
+
+			## if(line_find != 0):
+			else:
+				print("FINDING LINE NUMBER ERROR")
+				cashflow_sub_list = {}
+
+				cashflow_sub_list['year']				= 2017
+				cashflow_sub_list['op_cashflow']		= 0.0
+				cashflow_sub_list['op_cashflow_sub1']	= "FINDING LINE NUMBER ERROR"
+				cashflow_sub_list['op_cashflow_sub2']	= 0.0
+
+				cashflow_sub_list['invest_cashflow']		= 0.0
+				cashflow_sub_list['invest_cashflow_sub1']	= 0.0
+				cashflow_sub_list['invest_cashflow_sub2'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub3'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub4'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub5'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub6'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub7'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub8'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub9'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub10']	= 0.0
+				cashflow_sub_list['invest_cashflow_sub11'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub12'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub13'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub14'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub15'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub16'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub17'] 	= 0.0
+				cashflow_sub_list['invest_cashflow_sub18'] 	= 0.0
+
+				cashflow_sub_list['fin_cashflow']		= 0.0
+				cashflow_sub_list['fin_cashflow_sub1']	= 0.0
+				cashflow_sub_list['fin_cashflow_sub2'] 	= 0.0
+				cashflow_sub_list['fin_cashflow_sub3'] 	= 0.0
+
+				cashflow_sub_list['start_cash']		= 0.0
+				cashflow_sub_list['end_cash']		= 0.0
+				cashflow_sub_list['net_income']		= 0.0
+
+				#print(cashflow_sub_list)
+
+				balance_sheet_sub_list = {}
+				balance_sheet_sub_list['year']						=	2017
+				balance_sheet_sub_list["asset_current"]				=	0.0
+				balance_sheet_sub_list["asset_current_sub1"]		=	"FINDING LINE NUMBER ERROR"
+				balance_sheet_sub_list["asset_current_sub2"]		=	0.0
+				balance_sheet_sub_list["asset_current_sub3"]		=	0.0
+				balance_sheet_sub_list["asset_non_current"]			=	0.0
+				balance_sheet_sub_list["asset_non_current_sub1"]	=	0.0
+				balance_sheet_sub_list["asset_non_current_sub2"]	=	0.0
+				balance_sheet_sub_list["asset_sum"]					=	0.0
+				balance_sheet_sub_list["liability_current"]				=	0.0
+				balance_sheet_sub_list["liability_current_sub1"]		=	0.0
+				balance_sheet_sub_list["liability_current_sub2"]		=	0.0
+				balance_sheet_sub_list["liability_current_sub3"]		=	0.0
+				balance_sheet_sub_list["liability_non_current"]			=	0.0
+				balance_sheet_sub_list["liability_non_current_sub1"]	=	0.0
+				balance_sheet_sub_list["liability_non_current_sub2"]	=	0.0
+				balance_sheet_sub_list["liability_non_current_sub3"]	=	0.0
+				balance_sheet_sub_list["liability_non_current_sub4"]	=	0.0
+				balance_sheet_sub_list["liability_sum"]					=	0.0
+				balance_sheet_sub_list["equity"]						=	0.0
+				balance_sheet_sub_list["equity_sub1"]					=	0.0
+				balance_sheet_sub_list["equity_sub3"]					=	0.0
+				balance_sheet_sub_list["equity_sub2"]					=	0.0
+				balance_sheet_sub_list["equity_sum"]					=	0.0
+
+				income_statement_sub_list = {}
+				income_statement_sub_list['year']				=	2017
+				income_statement_sub_list["sales"]				=	0.0
+				income_statement_sub_list["sales_sub1"]			=	"FINDING LINE NUMBER ERROR"
+				income_statement_sub_list["sales_sub2"]			=	0.0
+				income_statement_sub_list["sales_sub3"]			=	0.0
+				income_statement_sub_list["sales2"]				=	0.0
+				income_statement_sub_list["sales2_sub1"]		=	0.0
+				income_statement_sub_list["op_income"]		 	=	0.0
+				income_statement_sub_list["op_income_sub1"]		=	0.0
+				income_statement_sub_list["op_income_sub2"]		=	0.0
+				income_statement_sub_list["op_income_sub3"]		=	0.0
+				income_statement_sub_list["op_income_sub4"]		=	0.0
+				income_statement_sub_list["op_income_sub5"]		=	0.0
+				income_statement_sub_list["op_income_sub6"]		=	0.0
+				income_statement_sub_list["op_income_sub7"]		=	0.0
+				income_statement_sub_list["tax"]				=	0.0
+				income_statement_sub_list["net_income"]			=	0.0
+				income_statement_sub_list["eps"]				=	0.0
+
+			dart_post_sublist.append(date)
+			dart_post_sublist.append(corp_name)
+			dart_post_sublist.append(market)
+			dart_post_sublist.append(title)
+			dart_post_sublist.append(link)
+
+			dart_post_list.append(dart_post_sublist)
+			cashflow_list.append(cashflow_sub_list)
+			balance_sheet_list.append(balance_sheet_sub_list)
+			income_statement_list.append(income_statement_sub_list)
+
+		#handle = urllib.request.urlopen(url_templete % (report, urllib.parse.quote(corp)))
+		#print("URL" + url_templete % (report, corp))
+		handle = urllib.request.urlopen(url_templete % (report, urllib.parse.quote(corp), start_day.strftime('%Y%m%d'), end_day.strftime('%Y%m%d')))
+		print("URL" + url_templete % (report, corp, start_day.strftime('%Y%m%d'), end_day.strftime('%Y%m%d')))
+
+		data = handle.read()
+		soup = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+
+		table = soup.find('table')
+		trs = table.findAll('tr')
+		tds = table.findAll('td')
+		counts = len(tds)
+		#print(counts)
+
+		#if counts > 0:
+		if counts > 2:
+			# Delay operation
+			time.sleep(20)
+
+			link_list = []
+			date_list = []
+			corp_list = []
+			market_list = []
+			title_list = []
+			reporter_list = []
+			tr_cnt = 0
+
+			for tr in trs[1:]:
+				tr_cnt = tr_cnt + 1
+				time.sleep(2)
+				tds = tr.findAll('td')
+				link = 'http://dart.fss.or.kr' + tds[2].a['href']
+				date = tds[4].text.strip().replace('.', '-')
+				corp_name = tds[1].text.strip()
+				market = tds[1].img['title']
+				title = " ".join(tds[2].text.split())
+				reporter = tds[3].text.strip()
+
+				re_pass = re.compile("해외증권거래소등에신고한사업보고서등의국내신고")
+				if (not re_pass.search(title)):
+					link_list.append(link)
+					date_list.append(date)
+					corp_list.append(corp_name)
+					market_list.append(market)
+					title_list.append(title)
+					reporter_list.append(reporter)
+
+					dart_post_sublist = []
+
+					year = int(date[0:4])
+					print(corp_name)
+					print(title)
+					print(date)
+					handle = urllib.request.urlopen(link)
+					#print(link)
+					data = handle.read()
+					soup2 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+					#print(soup2)
+
+					#print(type(soup2.find('head').text))
+					head_lines = soup2.find('head').text.split("\n")
+					#print(head_words)
+
+					# From 2015 ~ now
+					#if (year>2014):
+					#	re_tree_find = re.compile("2. 연결재무제표")
+					## From 2010 to 2014
+					#elif (year>2009):
+					#	re_tree_find = re.compile("재무제표 등")
+					## From 2008 to 2009
+					#elif (year>2007):
+					#	re_tree_find = re.compile("1. 연결재무제표에 관한 사항")
+					## From 2002 to 2007
+					#elif (year>2001):
+					#	re_tree_find = re.compile("4. 재무제표")
+					#else:
+					#	re_tree_find = re.compile("3. 재무제표")
+
+					re_tree_find1 = re.compile("2. 연결재무제표")
+					re_tree_find2 = re.compile("재무제표 등")
+					re_tree_find3 = re.compile("1. 연결재무제표에 관한 사항")
+					re_tree_find4 = re.compile("4. 재무제표")
+					re_tree_find5 = re.compile("3. 재무제표")
+
+					re_tree_find1_bak = re.compile("4.[ ]*재무제표")
+
+					line_num = 0
+					line_find = 0
+					for head_line in head_lines:
+						if (re_tree_find1.search(head_line)):
+							line_find = line_num
+							break
+							#print(head_line)
+						elif (re_tree_find2.search(head_line)):
+							line_find = line_num
+							break
+						elif (re_tree_find3.search(head_line)):
+							line_find = line_num
+							break
+						elif (re_tree_find4.search(head_line)):
+							line_find = line_num
+							break
+						elif (re_tree_find5.search(head_line)):
+							line_find = line_num
+							break
+						line_num = line_num + 1
+
+					line_num = 0
+					line_find_bak = 0
+					for head_line in head_lines:
+						if (re_tree_find1_bak.search(head_line)):
+							line_find_bak = line_num
+							break
+						line_num = line_num + 1
+
+
+					if(line_find != 0):
+
+						#print(head_lines[line_find])
+						#print(head_lines[line_find+1])
+						#print(head_lines[line_find+2])
+						#print(head_lines[line_find+3])
+						#print(head_lines[line_find+4])
+
+						line_words = head_lines[line_find+4].split("'")
 						#print(line_words)
 						rcpNo = line_words[1]
 						dcmNo = line_words[3]
 						eleId = line_words[5]
 						offset = line_words[7]
 						length = line_words[9]
+
+						#test = soup2.find('a', {'href' : '#download'})['onclick']
+						#words = test.split("'")
+						#rcpNo = words[1]
+						#dcmNo = words[3]
 
 						dart = soup2.find_all(string=re.compile('dart.dtd'))
 						dart2 = soup2.find_all(string=re.compile('dart2.dtd'))
@@ -1844,198 +1821,236 @@ def main():
 						elif len(dart) != 0:
 							link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart.dtd"
 						else:
-							link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"  
-						
+							link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"
+
 						print(link2)
-						
+
+						#try:
 						handle = urllib.request.urlopen(link2)
-						print(handle)
+						#print(handle)
 						data = handle.read()
 						soup3 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+						#print(soup3)
+
 						tables = soup3.findAll("table")
 
+						# 2. 연결재무제표가 비어 있는 경우
+						if (len(tables) == 0):
 
-					cnt = 0
-					table_num = 0
+							line_words = head_lines[line_find_bak+4].split("'")
+							#print(line_words)
+							try:
+								rcpNo = line_words[1]
+							except:
+								continue
+							dcmNo = line_words[3]
+							eleId = line_words[5]
+							offset = line_words[7]
+							length = line_words[9]
 
-					for table in tables:
-						if (re_cashflow_find.search(table.text)):
-							table_num = cnt
-							break
-						cnt = cnt + 1
-					
-					print("table_num", table_num, "Tables", len(tables))
-					cashflow_table = soup3.findAll("table")[table_num]
-					
-					trs = cashflow_table.findAll("tr")
-					
-					cnt = 0
-					table_income_num = 0
-					for table in tables:
-						if (re_income_find.search(table.text)):
-							table_income_num = cnt
-							break
-						cnt = cnt + 1
-					income_table = soup3.findAll("table")[table_income_num]
-					print("table_income_num", table_income_num, "Tables", len(tables))
-					
-					cnt = 0
-					table_balance_num = 0
-					for table in tables:
-						if (re_balance_sheet_find.search(table.text)):
-							table_balance_num = cnt
-							break
-						cnt = cnt + 1
-					balance_table = soup3.findAll("table")[table_balance_num]
-					print("table_balance_num", table_balance_num, "Tables", len(tables))
-			
-					unit = 100.0
-					unit_find = 0
-					re_unit1 = re.compile('단위[ \s]*:[ \s]*원')
-					re_unit2 = re.compile('단위[ \s]*:[ \s]*백만원')
-					re_unit3 = re.compile('단위[ \s]*:[ \s]*천원')
+							dart = soup2.find_all(string=re.compile('dart.dtd'))
+							dart2 = soup2.find_all(string=re.compile('dart2.dtd'))
+							dart3 = soup2.find_all(string=re.compile('dart3.xsd'))
 
-					# 원
-					if len(soup3.findAll("table")[table_num-1](string=re_unit1)) != 0:
-						unit = 100000000.0
-						unit_find = 1
-						#print("Unit ###1")
-					# 백만원
-					elif len(soup3.findAll("table")[table_num-1](string=re_unit2)) != 0:
+							if len(dart3) != 0:
+								link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart3.xsd"
+							elif len(dart2) != 0:
+								link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart2.dtd"
+							elif len(dart) != 0:
+								link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=" + eleId + "&offset=" + offset + "&length=" + length + "&dtd=dart.dtd"
+							else:
+								link2 = "http://dart.fss.or.kr/report/viewer.do?rcpNo=" + rcpNo + "&dcmNo=" + dcmNo + "&eleId=0&offset=0&length=0&dtd=HTML"
+
+							print(link2)
+
+							handle = urllib.request.urlopen(link2)
+							print(handle)
+							data = handle.read()
+							soup3 = BeautifulSoup(data, 'html.parser', from_encoding='utf-8')
+							tables = soup3.findAll("table")
+
+
+						cnt = 0
+						table_num = 0
+
+						for table in tables:
+							if (re_cashflow_find.search(table.text)):
+								table_num = cnt
+								break
+							cnt = cnt + 1
+
+						print("table_num", table_num, "Tables", len(tables))
+						cashflow_table = soup3.findAll("table")[table_num]
+
+						trs = cashflow_table.findAll("tr")
+
+						cnt = 0
+						table_income_num = 0
+						for table in tables:
+							if (re_income_find.search(table.text)):
+								table_income_num = cnt
+								break
+							cnt = cnt + 1
+						income_table = soup3.findAll("table")[table_income_num]
+						print("table_income_num", table_income_num, "Tables", len(tables))
+
+						cnt = 0
+						table_balance_num = 0
+						for table in tables:
+							if (re_balance_sheet_find.search(table.text)):
+								table_balance_num = cnt
+								break
+							cnt = cnt + 1
+						balance_table = soup3.findAll("table")[table_balance_num]
+						print("table_balance_num", table_balance_num, "Tables", len(tables))
+
 						unit = 100.0
-						unit_find = 1
-						#print("Unit ###2")
-					elif len(soup3.findAll("table")[table_num-1](string=re_unit3)) != 0:
-						unit = 100000.0
-						unit_find = 1
-						#print("Unit ###3")
+						unit_find = 0
+						re_unit1 = re.compile('단위[ \s]*:[ \s]*원')
+						re_unit2 = re.compile('단위[ \s]*:[ \s]*백만원')
+						re_unit3 = re.compile('단위[ \s]*:[ \s]*천원')
 
-					if unit_find == 0:
-						print ("UNIT NOT FOUND")
-						if len(soup3.findAll(string=re_unit1)) != 0:
-							print("Unit ###1")
+						# 원
+						if len(soup3.findAll("table")[table_num-1](string=re_unit1)) != 0:
 							unit = 100000000.0
-						elif len(soup3.findAll(string=re_unit2)) != 0:
-							print("Unit ###2")
+							unit_find = 1
+							#print("Unit ###1")
+						# 백만원
+						elif len(soup3.findAll("table")[table_num-1](string=re_unit2)) != 0:
 							unit = 100.0
-						elif len(soup3.findAll(string=re_unit3)) != 0:
-							print("Unit ###3")
+							unit_find = 1
+							#print("Unit ###2")
+						elif len(soup3.findAll("table")[table_num-1](string=re_unit3)) != 0:
 							unit = 100000.0
-			
-					## 원
-					#if len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*원'))) != 0:
-					#	unit = 100000000.0
-					## 백만원
-					#elif len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*백만원'))) != 0:
-					#	unit = 100.0
-					#elif len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*천원'))) != 0:
-					#	unit = 100000.0
-				
-					# Scrape data
-					cashflow_sub_list = scrape_cashflows(cashflow_table, year-1, unit)
-					income_statement_sub_list = scrape_income_statement(income_table, year-1, unit, 0)
-					balance_sheet_sub_list = scrape_balance_sheet(balance_table, year-1, unit)
-					print(cashflow_sub_list)
-					
-					cashflow_sub_list['net_income'] = income_statement_sub_list['net_income']
+							unit_find = 1
+							#print("Unit ###3")
 
-				## if(line_find != 0):
-				else:
-					print("FINDING LINE NUMBER ERROR")
-					cashflow_sub_list = {}
-					
-					cashflow_sub_list['year']				= year-1
-					cashflow_sub_list['op_cashflow']		= 0.0
-					cashflow_sub_list['op_cashflow_sub1']	= "FINDING LINE NUMBER ERROR"
-					cashflow_sub_list['op_cashflow_sub2']	= 0.0
+						if unit_find == 0:
+							print ("UNIT NOT FOUND")
+							if len(soup3.findAll(string=re_unit1)) != 0:
+								print("Unit ###1")
+								unit = 100000000.0
+							elif len(soup3.findAll(string=re_unit2)) != 0:
+								print("Unit ###2")
+								unit = 100.0
+							elif len(soup3.findAll(string=re_unit3)) != 0:
+								print("Unit ###3")
+								unit = 100000.0
 
-					cashflow_sub_list['invest_cashflow']		= 0.0
-					cashflow_sub_list['invest_cashflow_sub1']	= 0.0
-					cashflow_sub_list['invest_cashflow_sub2'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub3'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub4'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub5'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub6'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub7'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub8'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub9'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub10']	= 0.0
-					cashflow_sub_list['invest_cashflow_sub11'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub12'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub13'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub14'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub15'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub16'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub17'] 	= 0.0
-					cashflow_sub_list['invest_cashflow_sub18'] 	= 0.0
-					
-					cashflow_sub_list['fin_cashflow']		= 0.0
-					cashflow_sub_list['fin_cashflow_sub1']	= 0.0
-					cashflow_sub_list['fin_cashflow_sub2'] 	= 0.0
-					cashflow_sub_list['fin_cashflow_sub3'] 	= 0.0
+						## 원
+						#if len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*원'))) != 0:
+						#	unit = 100000000.0
+						## 백만원
+						#elif len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*백만원'))) != 0:
+						#	unit = 100.0
+						#elif len(soup3.findAll("table")[table_num-1](string=re.compile('단위[ ]*:[ ]*천원'))) != 0:
+						#	unit = 100000.0
 
-					cashflow_sub_list['start_cash']		= 0.0
-					cashflow_sub_list['end_cash']		= 0.0
-					cashflow_sub_list['net_income']		= 0.0
-			
-					balance_sheet_sub_list = {}
-					balance_sheet_sub_list['year']						=	year-1
-					balance_sheet_sub_list["asset_current"]				=	0.0
-					balance_sheet_sub_list["asset_current_sub1"]		=	"FINDING LINE NUMBER ERROR"
-					balance_sheet_sub_list["asset_current_sub2"]		=	0.0
-					balance_sheet_sub_list["asset_current_sub3"]		=	0.0
-					balance_sheet_sub_list["asset_non_current"]			=	0.0
-					balance_sheet_sub_list["asset_non_current_sub1"]	=	0.0
-					balance_sheet_sub_list["asset_non_current_sub2"]	=	0.0
-					balance_sheet_sub_list["asset_sum"]					=	0.0
-					balance_sheet_sub_list["liability_current"]				=	0.0
-					balance_sheet_sub_list["liability_current_sub1"]		=	0.0
-					balance_sheet_sub_list["liability_current_sub2"]		=	0.0
-					balance_sheet_sub_list["liability_current_sub3"]		=	0.0
-					balance_sheet_sub_list["liability_non_current"]			=	0.0
-					balance_sheet_sub_list["liability_non_current_sub1"]	=	0.0
-					balance_sheet_sub_list["liability_non_current_sub2"]	=	0.0
-					balance_sheet_sub_list["liability_non_current_sub3"]	=	0.0
-					balance_sheet_sub_list["liability_non_current_sub4"]	=	0.0
-					balance_sheet_sub_list["liability_sum"]					=	0.0
-					balance_sheet_sub_list["equity"]						=	0.0
-					balance_sheet_sub_list["equity_sub1"]					=	0.0
-					balance_sheet_sub_list["equity_sub3"]					=	0.0
-					balance_sheet_sub_list["equity_sub2"]					=	0.0
-					balance_sheet_sub_list["equity_sum"]					=	0.0
+						# Scrape data
+						cashflow_sub_list = scrape_cashflows(cashflow_table, year-1, unit)
+						income_statement_sub_list = scrape_income_statement(income_table, year-1, unit, 0)
+						balance_sheet_sub_list = scrape_balance_sheet(balance_table, year-1, unit)
+						print(cashflow_sub_list)
 
-					income_statement_sub_list = {}
-					income_statement_sub_list["year"]				=	year-1
-					income_statement_sub_list["sales"]				=	0.0
-					income_statement_sub_list["sales_sub1"]			=	"FINDING LINE NUMBER ERROR"
-					income_statement_sub_list["sales_sub2"]			=	0.0
-					income_statement_sub_list["sales_sub3"]			=	0.0
-					income_statement_sub_list["sales2"]				=	0.0
-					income_statement_sub_list["sales2_sub1"]		=	0.0
-					income_statement_sub_list["op_income"]		 	=	0.0
-					income_statement_sub_list["op_income_sub1"]		=	0.0
-					income_statement_sub_list["op_income_sub2"]		=	0.0
-					income_statement_sub_list["op_income_sub3"]		=	0.0
-					income_statement_sub_list["op_income_sub4"]		=	0.0
-					income_statement_sub_list["op_income_sub5"]		=	0.0
-					income_statement_sub_list["op_income_sub6"]		=	0.0
-					income_statement_sub_list["op_income_sub7"]		=	0.0
-					income_statement_sub_list["tax"]				=	0.0
-					income_statement_sub_list["net_income"]			=	0.0
-					income_statement_sub_list["eps"]				=	0.0
+						cashflow_sub_list['net_income'] = income_statement_sub_list['net_income']
 
-				dart_post_sublist.append(date)
-				dart_post_sublist.append(corp_name)
-				dart_post_sublist.append(market)
-				dart_post_sublist.append(title)
-				dart_post_sublist.append(link)
-				
-				dart_post_list.append(dart_post_sublist)
-				cashflow_list.append(cashflow_sub_list)
-				balance_sheet_list.append(balance_sheet_sub_list)
-				income_statement_list.append(income_statement_sub_list)
+					## if(line_find != 0):
+					else:
+						print("FINDING LINE NUMBER ERROR")
+						cashflow_sub_list = {}
 
-	write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet_list, income_statement_list, corp, stock_code, stock_cat)
+						cashflow_sub_list['year']				= year-1
+						cashflow_sub_list['op_cashflow']		= 0.0
+						cashflow_sub_list['op_cashflow_sub1']	= "FINDING LINE NUMBER ERROR"
+						cashflow_sub_list['op_cashflow_sub2']	= 0.0
+
+						cashflow_sub_list['invest_cashflow']		= 0.0
+						cashflow_sub_list['invest_cashflow_sub1']	= 0.0
+						cashflow_sub_list['invest_cashflow_sub2'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub3'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub4'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub5'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub6'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub7'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub8'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub9'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub10']	= 0.0
+						cashflow_sub_list['invest_cashflow_sub11'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub12'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub13'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub14'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub15'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub16'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub17'] 	= 0.0
+						cashflow_sub_list['invest_cashflow_sub18'] 	= 0.0
+
+						cashflow_sub_list['fin_cashflow']		= 0.0
+						cashflow_sub_list['fin_cashflow_sub1']	= 0.0
+						cashflow_sub_list['fin_cashflow_sub2'] 	= 0.0
+						cashflow_sub_list['fin_cashflow_sub3'] 	= 0.0
+
+						cashflow_sub_list['start_cash']		= 0.0
+						cashflow_sub_list['end_cash']		= 0.0
+						cashflow_sub_list['net_income']		= 0.0
+
+						balance_sheet_sub_list = {}
+						balance_sheet_sub_list['year']						=	year-1
+						balance_sheet_sub_list["asset_current"]				=	0.0
+						balance_sheet_sub_list["asset_current_sub1"]		=	"FINDING LINE NUMBER ERROR"
+						balance_sheet_sub_list["asset_current_sub2"]		=	0.0
+						balance_sheet_sub_list["asset_current_sub3"]		=	0.0
+						balance_sheet_sub_list["asset_non_current"]			=	0.0
+						balance_sheet_sub_list["asset_non_current_sub1"]	=	0.0
+						balance_sheet_sub_list["asset_non_current_sub2"]	=	0.0
+						balance_sheet_sub_list["asset_sum"]					=	0.0
+						balance_sheet_sub_list["liability_current"]				=	0.0
+						balance_sheet_sub_list["liability_current_sub1"]		=	0.0
+						balance_sheet_sub_list["liability_current_sub2"]		=	0.0
+						balance_sheet_sub_list["liability_current_sub3"]		=	0.0
+						balance_sheet_sub_list["liability_non_current"]			=	0.0
+						balance_sheet_sub_list["liability_non_current_sub1"]	=	0.0
+						balance_sheet_sub_list["liability_non_current_sub2"]	=	0.0
+						balance_sheet_sub_list["liability_non_current_sub3"]	=	0.0
+						balance_sheet_sub_list["liability_non_current_sub4"]	=	0.0
+						balance_sheet_sub_list["liability_sum"]					=	0.0
+						balance_sheet_sub_list["equity"]						=	0.0
+						balance_sheet_sub_list["equity_sub1"]					=	0.0
+						balance_sheet_sub_list["equity_sub3"]					=	0.0
+						balance_sheet_sub_list["equity_sub2"]					=	0.0
+						balance_sheet_sub_list["equity_sum"]					=	0.0
+
+						income_statement_sub_list = {}
+						income_statement_sub_list["year"]				=	year-1
+						income_statement_sub_list["sales"]				=	0.0
+						income_statement_sub_list["sales_sub1"]			=	"FINDING LINE NUMBER ERROR"
+						income_statement_sub_list["sales_sub2"]			=	0.0
+						income_statement_sub_list["sales_sub3"]			=	0.0
+						income_statement_sub_list["sales2"]				=	0.0
+						income_statement_sub_list["sales2_sub1"]		=	0.0
+						income_statement_sub_list["op_income"]		 	=	0.0
+						income_statement_sub_list["op_income_sub1"]		=	0.0
+						income_statement_sub_list["op_income_sub2"]		=	0.0
+						income_statement_sub_list["op_income_sub3"]		=	0.0
+						income_statement_sub_list["op_income_sub4"]		=	0.0
+						income_statement_sub_list["op_income_sub5"]		=	0.0
+						income_statement_sub_list["op_income_sub6"]		=	0.0
+						income_statement_sub_list["op_income_sub7"]		=	0.0
+						income_statement_sub_list["tax"]				=	0.0
+						income_statement_sub_list["net_income"]			=	0.0
+						income_statement_sub_list["eps"]				=	0.0
+
+					dart_post_sublist.append(date)
+					dart_post_sublist.append(corp_name)
+					dart_post_sublist.append(market)
+					dart_post_sublist.append(title)
+					dart_post_sublist.append(link)
+
+					dart_post_list.append(dart_post_sublist)
+					cashflow_list.append(cashflow_sub_list)
+					balance_sheet_list.append(balance_sheet_sub_list)
+					income_statement_list.append(income_statement_sub_list)
+
+		write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet_list, income_statement_list, corp, stock_code, stock_cat)
 
 # Main
 if __name__ == "__main__":
