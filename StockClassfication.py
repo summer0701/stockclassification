@@ -5,12 +5,20 @@ import codecs
 import json
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+from scipy import stats
 NUMBER_OF_FEATURE = 66
-
+THRASH_HOLD = 103
 
 class StockClassfication:
 	def __init__(self):
 		print ("stock classfication init:")
+
+	def priceThrashhold(self):
+		self.training_result_np = np.load('./training_result_np_save.npy')
+		self.training_result_thrashhold = np.where(self.training_result_np >103,1,0)
+
+		np.save('training_result_thrashold', self.training_result_thrashhold)
+
 	def prepareData(self):
 
 		with open('change_list.json', 'r', encoding='cp949', errors='ignore') as f:
@@ -43,18 +51,16 @@ class StockClassfication:
 		np.save('training_result_np_save', self.training_result)
 		print("pop")
 
-
-
-
-
 	def LLS0_VarianceMaximizer(self):
 		self.LS0_Clustering()
 		self.LS1_compressing()
 
 	def LLS1_ImportanceMaximizer(self):
 		print("LLS1_ImportanceMaximizer")
+
 	def LLS2_c2weightProductor(self):
 		print("LLS2_c2weightProductor")
+
 	def LS0_Clustering(self):
 		print("LS0_Clustering")
 		self.size_S = 15
@@ -65,12 +71,11 @@ class StockClassfication:
 		self.result_cluster_s =kmeans.labels_
 		np.save('result_cluster_s', self.result_cluster_s)
 
-
-
 	def LS1_compressing(self):
 		print("LS1_compressing")
 		self.training_data_np = np.load('./training_data_np_save.npy')
 		self.result_cluster_s = np.load('./result_cluster_s.npy')
+		self.training_result_thrashhold = np.load('./training_result_thrashold.npy')
 		self.tdnTrans = np.transpose(self.training_data_np)
 		self.training_data_pca = []
 		self.clusterLabel = []
@@ -81,28 +86,26 @@ class StockClassfication:
 			result = np.where(self.result_cluster_s == i)
 			if result[0].size == 0:
 				continue
-			pca.fit(np.transpose(self.tdnTrans[result]))
-			r_pca = pca.transform(np.transpose(self.tdnTrans[result]))
-			print(pca.explained_variance_ratio_)
-			self.training_data_pca.append(preprocessing.scale(r_pca))
-			cw = self.LS0_Cluster_Weighter(self.training_data_np.shape[1], result[0].size)
-			self.training_data_with_cl.append({'cw':cw, 'data':self.training_data_pca})
+			#pca.fit(np.transpose(self.tdnTrans[result]))
+			#r_pca = pca.transform(np.transpose(self.tdnTrans[result]))
+			#print(pca.explained_variance_ratio_)
+			#self.training_data_pca.append(r_pca)
+			#cw = self.LS0_Cluster_Weighter(self.training_data_np.shape[1], result[0].size)
+			for r in self.tdnTrans[result]:
+				cl = self.LS1_CorrealtionWeighter(self.training_result_thrashhold, r)
+			#self.training_data_with_cl.append({'cw':cw, 'data':self.training_data_pca})
 
 		#np.array(self.training_data_pca).reshape(len(self.training_data_pca), len(self.training_data_pca[0]))
 		print("LS1_compressing fin")
 
-
-
-
-
-
-
-
-
+	def LS1_CorrealtionWeighter(self, trt, tdp):
+		result  = stats.pearsonr(trt, tdp)
+		return result
+		print("LS1_CorrealtionWeighter")
 
 	def LS0_Cluster_Weighter(self,totalFisets, subfisets):
-		return subfisets/totalFisets
 		print("LS0_Cluster_Weighter")
+		return subfisets/totalFisets
 
 	def LS2_WeightingProductor(self):
 		print("LS2_WeightingProductor")
@@ -112,4 +115,5 @@ class StockClassfication:
 sc = StockClassfication()
 #sc.prepareData()
 #sc.LLS0_VarianceMaximizer()
+#sc.priceThrashhold()
 sc.LS1_compressing()
