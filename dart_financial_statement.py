@@ -20,7 +20,7 @@ import pandas_datareader
 def find_value(text, unit):
 	return int(text.replace(" ","").replace("△","-").replace("(-)","-").replace("(","-").replace(")","").replace(",","").replace("=",""))/unit
 
-# Draw figure of cashflows.
+# draw figure of cashflows and financial statement
 def draw_cashflow_figure(income_list, income_list2, year_list, op_cashflow_list, fcf_list, div_list, stock_close):
 	
 	for i in range(len(income_list)):
@@ -45,7 +45,7 @@ def draw_cashflow_figure(income_list, income_list2, year_list, op_cashflow_list,
 	plt.legend(loc=4)
 	plt.show()
 
-# Draw figure of net income & assets.
+# draw figure of stock price
 def draw_corp_history(year_list, asset_sum_list, liability_sum_list, equity_sum_list, sales_list, op_income_list, net_income_list):
 	
 	fig, ax1 = plt.subplots()
@@ -67,8 +67,7 @@ def draw_corp_history(year_list, asset_sum_list, liability_sum_list, equity_sum_
 	
 	plt.show()
 
-
-# Write financial statements to Excel file.
+# write data to Excel file.
 def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet_list, income_statement_list, corp, stock_code, stock_cat):
 	# Write an Excel file
 
@@ -175,9 +174,9 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 		worksheet_result.write(k+1,32, cashflow_list[k]	['start_cash']				, num2_format)
 		worksheet_result.write(k+1,33, cashflow_list[k]	['end_cash']				, num2_format)
 
-	cashflow_list.reverse() 
+	cashflow_list.reverse()
 	worksheet_cashflow = workbook.add_worksheet('Cashflow Statement')
-	
+
 	worksheet_cashflow.set_column('A:A', 30)
 	worksheet_cashflow.write(0, 0, "결산년도", filter_format)
 	worksheet_cashflow.write(1, 0, "영업활동 현금흐름", filter_format)
@@ -242,7 +241,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 		fcf = fcf - abs(cashflow_list[k]['invest_cashflow_sub14'])
 		fcf = fcf - abs(cashflow_list[k]['invest_cashflow_sub15'])
 		fcf = fcf - abs(cashflow_list[k]['invest_cashflow_sub16'])
-	
+
 		if cashflow_list[k]['op_cashflow_sub1'] != "FINDING LINE NUMBER ERROR":
 			# Overwirting
 			if prev_year == cashflow_list[k]['year']:
@@ -279,7 +278,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 				worksheet_cashflow.write(30, j, cashflow_list[k]['end_cash']				, num2_format)
 				worksheet_cashflow.write(31, j, cashflow_list[k]['net_income']				, num2_format)
 				worksheet_cashflow.write(32, j, fcf, num2_format)
-				
+
 				year_list[-1] = cashflow_list[k]['year']
 				op_cashflow_list[-1] = cashflow_list[k]['op_cashflow']
 				fcf_list[-1] = fcf
@@ -321,7 +320,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 				worksheet_cashflow.write(30, j+1, cashflow_list[k]['end_cash']				, num2_format)
 				worksheet_cashflow.write(31, j+1, cashflow_list[k]['net_income']			, num2_format)
 				worksheet_cashflow.write(32, j+1, fcf, num2_format)
-			
+
 				year_list.append(cashflow_list[k]['year'])
 				op_cashflow_list.append(cashflow_list[k]['op_cashflow'])
 				fcf_list.append(fcf)
@@ -330,13 +329,13 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 				div_list.append(abs(cashflow_list[k]['fin_cashflow_sub2']))
 				cash_equivalents_list.append(cashflow_list[k]['end_cash'])
 				j = j+1
-		
+
 			prev_year = cashflow_list[k]['year']
 
 	# Balance sheet
-	balance_sheet_list.reverse() 
+	balance_sheet_list.reverse()
 	worksheet_bs= workbook.add_worksheet('Balance Sheet')
-	
+
 	prev_year = 0
 	j = 0
 
@@ -369,7 +368,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 	worksheet_bs.write(21, 0, "자본잉여금", filter_format2)
 	worksheet_bs.write(22, 0, "이익잉여금", filter_format2)
 	worksheet_bs.write(23, 0, "자본총계", filter_format)
-	
+
 	for k in range(len(balance_sheet_list)):
 		if balance_sheet_list[k]['asset_current_sub1'] != "FINDING LINE NUMBER ERROR":
 			# Overwirting
@@ -408,13 +407,13 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 			worksheet_bs.write(21, w, balance_sheet_list[k]['equity_sub3']					, num2_format)
 			worksheet_bs.write(22, w, balance_sheet_list[k]['equity_sub2']					, num2_format)
 			worksheet_bs.write(23, w, balance_sheet_list[k]['equity_sum']					, num2_format)
-			
+
 			if prev_year != balance_sheet_list[k]['year']:
 				j = j+1
 			prev_year = balance_sheet_list[k]['year']
 
 	# Income statement
-	income_statement_list.reverse() 
+	income_statement_list.reverse()
 	worksheet_income= workbook.add_worksheet('Income Statement')
 
 	prev_year = 0
@@ -423,7 +422,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 	sales_list = []
 	op_income_list = []
 	net_income_list = []
-	
+
 	worksheet_income.set_column('A:A', 30)
 	worksheet_income.write(0, 0, "결산년도", filter_format)
 	worksheet_income.write(1, 0, "매출액", filter_format)
@@ -476,13 +475,13 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 			worksheet_income.write(15, w, income_statement_list[k]['tax']				, num2_format)
 			worksheet_income.write(16, w, income_statement_list[k]['net_income']		, num2_format)
 			#worksheet_income.write(17, w, income_statement_list[k]['eps']				, num2_format)
-			
+
 			if prev_year != income_statement_list[k]['year']:
 				j = j+1
 			prev_year = income_statement_list[k]['year']
-	
+
 	j = 0
-	
+
 	#Chart WORKSHEET
 	chart = workbook.add_chart({'type':'line'})
 	chart.add_series({
@@ -561,7 +560,7 @@ def write_excel_file(workbook_name, dart_post_list, cashflow_list, balance_sheet
 	#draw_cashflow_figure(income_list, income_list2, year_list, op_cashflow_list, fcf_list, div_list, stock_close)
 	#draw_corp_history(year_list, asset_sum_list, liability_sum_list, equity_sum_list, sales_list, op_income_list, net_income_list)
 
-# Get information of balance sheet
+# get information of balance sheet
 def scrape_balance_sheet(balance_sheet_table, year, unit):
 
 	#유동자산
@@ -791,7 +790,7 @@ def scrape_balance_sheet(balance_sheet_table, year, unit):
 	return balance_sheet_sub_list
 
 
-# Get information of cashflows statements
+# get information of cashflows statements
 def scrape_cashflows(cashflow_table, year, unit):
 
 	error_cashflows_list = []
@@ -1066,7 +1065,7 @@ def scrape_cashflows(cashflow_table, year, unit):
 	print(error_cashflows_list)
 	return cashflow_sub_list
 
-# Get information of income statements
+# get information of income statements
 def scrape_income_statement(income_table, year, unit, mode):
 
 	#매출액
