@@ -16,6 +16,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 NUMBER_OF_FEATURE = 66
 THRASH_HOLD = 110
 
@@ -71,6 +72,24 @@ class StockClassfication:
 
 	def LLS2_c2weightProductor(self):
 		print("LLS2_c2weightProductor")
+	def LS0_Clustering_chart(self, cs):
+		x = []
+		y = []
+		for i in range(self.size_S):
+			x.append(i)
+			y.append(np.count_nonzero(cs==i))
+
+		print("cluster number ")
+		print(x)
+		print("cluster count ")
+		print(y)
+		plt.bar(x, y)
+		plt.xlabel("cluster number")
+		plt.ylabel("count")
+		plt.show()
+
+
+
 
 	def LS0_Clustering(self):
 		print("LS0_Clustering")
@@ -79,8 +98,34 @@ class StockClassfication:
 		# 각 fisets끼리 클러스터를 해야하기때문에 행과 열을 바꾼다.
 		self.tdnTrans = np.transpose(self.training_data_np)
 		kmeans = KMeans(n_clusters=self.size_S, random_state=0,n_init=1000).fit(self.tdnTrans)
+
+		print("fisets data")
+		print("Shape" +str(self.tdnTrans.shape[0])+" " + str(self.tdnTrans.shape[1]))
+
+		print(self.tdnTrans)
 		self.result_cluster_s =kmeans.labels_
+		self.LS0_Clustering_chart(self.result_cluster_s)
 		np.save('result_cluster_s', self.result_cluster_s)
+	def LS1_compressing_chart(self):
+		print("LS1_compressing_chart")
+		self.training_data_with_c2fisets = pickle.load(open('training_data_with_c2fisets2.txt', 'rb'))
+		x =[]
+		y =[]
+
+		for tdwc2 in self.training_data_with_c2fisets:
+			x.append(tdwc2["cl"])
+			y.append(tdwc2["cw"])
+
+		#plt.hlines(1,np.amin(x),0.5)  # Draw a horizontal line
+		#plt.eventplot(y, orientation='horizontal', colors='b')
+		#plt.axis('off')
+		#plt.show()
+		plt.plot(x,y, 'g+')
+		plt.show()
+
+
+
+
 
 	def LS1_compressing(self):
 		self.sum = 0
@@ -102,11 +147,16 @@ class StockClassfication:
 				continue
 			cw = self.LS0_Cluster_Weighter(self.training_data_np.shape[1], result[0].size)
 			self.kbinsPCA = self.KbinPCA(self.tdnTrans[result])
+
+
+			print("PCA data" )
+			print(self.kbinsPCA)
+			print("Shape" +str(self.kbinsPCA.shape[0])+" " + str(self.kbinsPCA.shape[1]))
 			cl = 0
 			for r in self.tdnTrans[result]:
 				cl = cl+self.LS1_CorrealtionWeighter_kbin(self.training_result_np_save, r)
 			self.training_data_with_c2fisets.append({'cl':cl, 'cw':cw, 'data':self.kbinsPCA})
-
+			self.LS1_compressing_chart()
 		with open('training_data_with_c2fisets.txt', 'wb') as fp:
 			pickle.dump(self.training_data_with_c2fisets, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -118,6 +168,8 @@ class StockClassfication:
 			est = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(data.reshape(-1, 1))
 			kdata.append(est.fit_transform(data.reshape(-1, 1)))
 			npa = np.array(kdata)
+
+
 			npa = npa.reshape(npa.shape[0], npa.shape[1])
 			pca = PCA(n_components=1)
 			r_pca = pca.fit_transform(np.transpose(npa))
@@ -125,7 +177,10 @@ class StockClassfication:
 		for d in data:
 			est = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(d.reshape(-1, 1))
 			kdata.append(est.fit_transform(d.reshape(-1, 1)))
+
 		npa = np.array(kdata)
+		print("kdata")
+		print(np.transpose(npa))
 		npa = npa.reshape(npa.shape[0], npa.shape[1])
 		pca = PCA(n_components=2)
 		r_pca = pca.fit_transform(np.transpose(npa))
@@ -146,6 +201,10 @@ class StockClassfication:
 		if np.isnan(result[0][1]):
 			return 0
 		self.sum = self.sum + np.absolute(result[0][1])
+		print("=========trt==============")
+		print(np.transpose(trt_bf))
+		print("=========tdp===========")
+		print(np.transpose(tdp_bf))
 		return np.absolute(result[0][1])
 
 	def LS1_CorrealtionWeighter_bin(self, trt, tdp):
@@ -198,6 +257,11 @@ class StockClassfication:
 		print("Precision:", metrics.precision_score(y_test, y_pred))
 		print("Recall:", metrics.recall_score(y_test, y_pred))
 		print("Profit is :",np.sum(y_testProfit*y_pred)/np.sum(y_pred))
+
+		y_result = y_testProfit[np.where(y_pred != 0)]
+		for y in y_result:
+			print(y)
+
 
 		print("end of test")
 	def boost_Wrap(self,X_train, X_test, y_train, y_test,y_testProfit):
@@ -284,17 +348,116 @@ class StockClassfication:
 			pickle.dump(self.training_data_with_c2fisets, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
 
+class StockClassficationV2:
+	def __init__(self):
+		print("__init__")
+	def prepareData_chart(self):
+		training_data = []
+		with open('training_data_set.txt', 'rb') as fp:
+			training_set = pickle.load(fp)
+
+
+		for ts in training_set:
+			training_data.append(training_set[ts]["d"])
+
+
+		npa = np.array(training_data)
+
+		plt.boxplot(np.transpose(npa)[35:70])
+		plt.xlabel("fisets")
+		plt.ylabel("value")
+		plt.show()
+	def kbinChart(self,data):
+
+		for d in data:
+			print(d)
+
+	def kbinData(self):
+		print("kbinData")
+		training_data = []
+		with open('training_data_set.txt', 'rb') as fp:
+			training_set = pickle.load(fp)
+		npa = np.empty([0,70] ,dtype=int)
+		ts_del_list = []
+		for ts in training_set:
+			try:
+				npa = np.append(npa, np.array(training_set[ts]["d"]), axis=0)
+			except:
+				ts_del_list.append(ts)
+				continue
+		for tdl in ts_del_list:
+			del training_set[tdl]
+		est = []
+
+		for n in npa.transpose():
+			est.append(preprocessing.KBinsDiscretizer(n_bins=10, encode='ordinal').fit_transform(n.reshape(-1,1)))
+
+		np_est = np.array(est).transpose()[0]
+		self.kbinChart(np_est)
+		i=0
+		for ts in training_set:
+			training_set[ts]["kbinD"] = np_est[i]
+			i+=1
+		with open('training_data_set_kbin', 'wb') as fp:
+			pickle.dump(training_set, fp, protocol=pickle.HIGHEST_PROTOCOL)
+		print("done")
+
+
+	def prepareData(self):
+
+		with open('change_list.json', 'r', encoding='cp949', errors='ignore') as f:
+			org_data = json.load(f)
+		with open('change_price.json', 'r', encoding='cp949', errors='ignore') as f:
+			org_result = json.load(f)
+
+		data = np.empty([0,0] ,dtype=int)
+		#self.training_data = np.empty([0,0] ,dtype=int)
+		i = 0
+		training_set={}
+		training_data = []
+		training_result = []
+		for od in org_data:
+			for o in org_data[od]:
+				data = np.append(data,o[1])
+
+
+			try:
+				if len(data) != 70:
+					print(data)
+				training_result.append(org_result[od])
+				training_data.append(data)
+
+			except:
+				print("error..."+od)
+				data = []
+				training_data = []
+				training_result = []
+				continue
+			data = []
+			training_data = []
+			training_result = []
+			training_set[od] = {"r" : training_result,"d": training_data}
+
+			#print("generating..."+od)
+
+		with open('training_data_set.txt', 'wb') as fp:
+			pickle.dump(training_set, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 
-sc = StockClassfication()
+sc = StockClassficationV2()
+#sc.prepareData()
+#sc.prepareData_chart()
+sc.kbinData()
+
 #sc.prepareData()
 #sc.LLS0_VarianceMaximizer()
-sc.priceThrashhold()
+#sc.priceThrashhold()
 #sc.LS0_Clustering()
 #sc.LS1_compressing()
+#sc.LS1_compressing_chart()
 #sc.LS2_WeightingProductor()
-sc.StockClassification()
+#sc.StockClassification()
 
 
 
