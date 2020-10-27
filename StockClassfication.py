@@ -17,338 +17,26 @@ from sklearn.svm import LinearSVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from joblib import dump, load
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.python.keras.optimizers import Adam
+from sklearn.metrics import accuracy_score
+
 NUMBER_OF_FEATURE = 66
-THRASH_HOLD = 110
+THRASH_HOLD = 130
 
-class StockClassfication:
-	size_S = 30
-	def __init__(self):
-		print ("stock classfication init:")
 
-	def priceThrashhold(self):
-		self.training_result_np = np.load('./training_result_np_save.npy')
-		self.training_result_thrashhold = np.where(self.training_result_np >THRASH_HOLD,1,0)
-
-		np.save('training_result_thrashold', self.training_result_thrashhold)
-
-	def prepareData(self):
-
-		with open('change_list.json', 'r', encoding='cp949', errors='ignore') as f:
-			self.org_data = json.load(f)
-		with open('change_price.json', 'r', encoding='cp949', errors='ignore') as f:
-			self.org_result = json.load(f)
-		print("tipping")
-		data = np.empty([0,0] ,dtype=int)
-		#self.training_data = np.empty([0,0] ,dtype=int)
-		i = 0
-		self.training_data = []
-		self.training_result = []
-		for od in self.org_data:
-			for o in self.org_data[od]:
-				data = np.append(data,o[1])
-
-
-			try:
-				self.training_result.append(self.org_result[od])
-				self.training_data.append(data)
-
-			except:
-				print("error..."+od)
-			data = []
-			#print("generating..."+od)
-
-		self.training_data_np = np.array(self.training_data)
-		np.save('training_data_np_save',self.training_data_np)
-		self.training_result_np = np.array(self.training_result)
-		np.save('training_result_np_save', self.training_result)
-		print("pop")
-
-	def LLS0_VarianceMaximizer(self):
-		self.LS0_Clustering()
-		self.LS1_compressing()
-
-	def LLS1_ImportanceMaximizer(self):
-		print("LLS1_ImportanceMaximizer")
-
-	def LLS2_c2weightProductor(self):
-		print("LLS2_c2weightProductor")
-	def LS0_Clustering_chart(self, cs):
-		x = []
-		y = []
-		for i in range(self.size_S):
-			x.append(i)
-			y.append(np.count_nonzero(cs==i))
-
-		print("cluster number ")
-		print(x)
-		print("cluster count ")
-		print(y)
-		plt.bar(x, y)
-		plt.xlabel("cluster number")
-		plt.ylabel("count")
-		plt.show()
-
-
-
-
-	def LS0_Clustering(self):
-		print("LS0_Clustering")
-
-		self.training_data_np = np.load('./training_data_np_save.npy')
-		# 각 fisets끼리 클러스터를 해야하기때문에 행과 열을 바꾼다.
-		self.tdnTrans = np.transpose(self.training_data_np)
-		kmeans = KMeans(n_clusters=self.size_S, random_state=0,n_init=1000).fit(self.tdnTrans)
-
-		print("fisets data")
-		print("Shape" +str(self.tdnTrans.shape[0])+" " + str(self.tdnTrans.shape[1]))
-
-		print(self.tdnTrans)
-		self.result_cluster_s =kmeans.labels_
-		self.LS0_Clustering_chart(self.result_cluster_s)
-		np.save('result_cluster_s', self.result_cluster_s)
-	def LS1_compressing_chart(self):
-		print("LS1_compressing_chart")
-		self.training_data_with_c2fisets = pickle.load(open('training_data_with_c2fisets2.txt', 'rb'))
-		x =[]
-		y =[]
-
-		for tdwc2 in self.training_data_with_c2fisets:
-			x.append(tdwc2["cl"])
-			y.append(tdwc2["cw"])
-
-		#plt.hlines(1,np.amin(x),0.5)  # Draw a horizontal line
-		#plt.eventplot(y, orientation='horizontal', colors='b')
-		#plt.axis('off')
-		#plt.show()
-		plt.plot(x,y, 'g+')
-		plt.show()
-
-
-
-
-
-	def LS1_compressing(self):
-		self.sum = 0
-		print("LS1_compressing")
-		self.training_data_np = np.load('./training_data_np_save.npy')
-		self.result_cluster_s = np.load('./result_cluster_s.npy')
-		self.training_result_np_save = np.load('./training_result_np_save.npy')
-		self.training_result_thrashold = np.load('./training_result_thrashold.npy')
-
-		self.tdnTrans = np.transpose(self.training_data_np)
-		self.training_data_pca = []
-		self.clusterLabel = []
-		self.numberOfFisets = self.training_data_np.shape[1]
-		self.training_data_with_c2fisets = []
-		pca = PCA(n_components=1)
-		for i in range(0,self.size_S-1):
-			result = np.where(self.result_cluster_s == i)
-			if result[0].size == 0:
-				continue
-			cw = self.LS0_Cluster_Weighter(self.training_data_np.shape[1], result[0].size)
-			self.kbinsPCA = self.KbinPCA(self.tdnTrans[result])
-
-
-			print("PCA data" )
-			print(self.kbinsPCA)
-			print("Shape" +str(self.kbinsPCA.shape[0])+" " + str(self.kbinsPCA.shape[1]))
-			cl = 0
-			for r in self.tdnTrans[result]:
-				cl = cl+self.LS1_CorrealtionWeighter_kbin(self.training_result_np_save, r)
-			self.training_data_with_c2fisets.append({'cl':cl, 'cw':cw, 'data':self.kbinsPCA})
-			self.LS1_compressing_chart()
-		with open('training_data_with_c2fisets.txt', 'wb') as fp:
-			pickle.dump(self.training_data_with_c2fisets, fp, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-		print("LS1_compressing fin")
-	def KbinPCA(self, data):
-		kdata=[]
-		if data.shape[0] == 1:
-			est = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(data.reshape(-1, 1))
-			kdata.append(est.fit_transform(data.reshape(-1, 1)))
-			npa = np.array(kdata)
-
-
-			npa = npa.reshape(npa.shape[0], npa.shape[1])
-			pca = PCA(n_components=1)
-			r_pca = pca.fit_transform(np.transpose(npa))
-			return r_pca
-		for d in data:
-			est = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(d.reshape(-1, 1))
-			kdata.append(est.fit_transform(d.reshape(-1, 1)))
-
-		npa = np.array(kdata)
-		print("kdata")
-		print(np.transpose(npa))
-		npa = npa.reshape(npa.shape[0], npa.shape[1])
-		pca = PCA(n_components=2)
-		r_pca = pca.fit_transform(np.transpose(npa))
-		return r_pca
-
-
-
-
-	def LS1_CorrealtionWeighter_kbin(self, trt, tdp):
-
-		est = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(tdp.reshape(-1, 1))
-		tdp_bf = est.fit_transform(tdp.reshape(-1, 1))
-
-		est_f = preprocessing.KBinsDiscretizer(n_bins=[10], encode='ordinal').fit(trt.reshape(-1, 1))
-		trt_bf =  est_f.fit_transform(trt.reshape(-1, 1))
-		result = np.corrcoef(trt_bf.reshape(1, 3203), tdp_bf.reshape(1, 3203))
-		print("LS1_CorrealtionWeighter_bin")
-		if np.isnan(result[0][1]):
-			return 0
-		self.sum = self.sum + np.absolute(result[0][1])
-		print("=========trt==============")
-		print(np.transpose(trt_bf))
-		print("=========tdp===========")
-		print(np.transpose(tdp_bf))
-		return np.absolute(result[0][1])
-
-	def LS1_CorrealtionWeighter_bin(self, trt, tdp):
-
-			tdp_bf = preprocessing.Binarizer().fit(tdp.reshape(-1, 1))
-
-			tdp_bin = tdp_bf.transform(tdp.reshape(-1, 1))
-			#		trt_bf = preprocessing.Binarizer().fit(trt.reshape(-1, 1))
-			#		trt_normalized = trt_bf.transform(trt.reshape(-1, 1))
-			result = np.corrcoef(trt.reshape(1, 3203), tdp_bin.reshape(1, 3203))
-			if np.isnan(result[0][1]):
-				return 0
-
-			print("LS1_CorrealtionWeighter_bin")
-			self.sum = self.sum + np.absolute(result[0][1])
-			return result[0][1]
-
-	def LS1_CorrealtionWeighter_norm(self, trt, tdp):
-		tdp_bf = preprocessing.Binarizer().fit(tdp.reshape(-1, 1))
-		norm = preprocessing.normalize(tdp.reshape(-1, 1), norm='l2')
-		tdp_normalized = tdp_bf.transform(tdp.reshape(-1, 1))
-#		trt_bf = preprocessing.Binarizer().fit(trt.reshape(-1, 1))
-#		trt_normalized = trt_bf.transform(trt.reshape(-1, 1))
-		result  = np.corrcoef(trt.reshape(1,3203), norm.reshape(1,3203))
-		if np.isnan(result[0][1]):
-			return 0
-		print("LS1_CorrealtionWeighter_norm")
-		self.sum = self.sum + np.absolute(result[0][1])
-		return result[0][1]
-
-	def LS0_Cluster_Weighter(self,totalFisets, subfisets):
-		print("LS0_Cluster_Weighter")
-		return subfisets/totalFisets
-
-	def lSVC_Wrap(self,X_train, X_test, y_train, y_test,y_testProfit):
-		clf = make_pipeline(StandardScaler(), LinearSVC(random_state=0, tol=1e-10))
-		clf.fit(X_train, y_train)
-		y_pred = clf.predict(X_test)
-		print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-		print("Precision:", metrics.precision_score(y_test, y_pred))
-		print("Recall:", metrics.recall_score(y_test, y_pred))
-		print("Profit is :",np.sum(y_testProfit*y_pred)/np.sum(y_pred))
-
-		print("end of test")
-	def SVC_Wrap(self,X_train, X_test, y_train, y_test,y_testProfit):
-		clf = svm.SVC(kernel='linear')
-		clf.fit(X_train, y_train)
-		y_pred = clf.predict(X_test)
-		print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-		print("Precision:", metrics.precision_score(y_test, y_pred))
-		print("Recall:", metrics.recall_score(y_test, y_pred))
-		print("Profit is :",np.sum(y_testProfit*y_pred)/np.sum(y_pred))
-
-		y_result = y_testProfit[np.where(y_pred != 0)]
-		for y in y_result:
-			print(y)
-
-
-		print("end of test")
-	def boost_Wrap(self,X_train, X_test, y_train, y_test,y_testProfit):
-		clf = AdaBoostClassifier(n_estimators=1000, random_state=0)
-		clf.fit(X_train, y_train)
-		y_pred = clf.predict(X_test)
-		print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-		print("Precision:", metrics.precision_score(y_test, y_pred))
-		print("Recall:", metrics.recall_score(y_test, y_pred))
-		print("Profit is :", np.sum(y_testProfit * y_pred) / np.sum(y_pred))
-		print("end of test")
-	def mlp_Wrap(self,X_train, X_test, y_train, y_test,y_testProfit):
-		clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes = (100, 100), random_state = 1)
-		clf.fit(X_train, y_train)
-		y_pred = clf.predict(X_test)
-		print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-		print("Precision:", metrics.precision_score(y_test, y_pred))
-		print("Recall:", metrics.recall_score(y_test, y_pred))
-		print("Profit is :", np.sum(y_testProfit * y_pred) / np.sum(y_pred))
-		print("end of test")
-
-	def StockClassification(self):
-		self.training_result_thrashold = np.load('./training_result_thrashold.npy')
-
-		training_data =[]
-		self.training_data_with_c2fisets = pickle.load(open('training_data_with_c2fisets2.txt', 'rb'))
-		self.training_result_np_save = np.load('./training_result_np_save.npy')
-		for tdwc in self.training_data_with_c2fisets:
-			for i in range(0,int(tdwc['w'])+1):
-				for td in np.transpose(tdwc['data']):
-					training_data.append(td)
-
-
-		training_np = np.transpose(np.array(training_data))
-		result_np = np.array(self.training_result_thrashold).reshape(-1, 1)
-
-		tp = np.array_split(training_np, 3)
-		rnp = np.array_split(result_np, 3)
-		rnpp = np.array_split(self.training_result_np_save, 3)
-
-
-		X_train = np.append(tp[0], tp[1], axis=0)
-		y_train = np.append(rnp[0], rnp[1], axis=0)
-		X_test = np.array(tp[2])
-		y_test = np.array(rnp[2])
-		y_testProfit = np.array(rnpp[2])
-		#X_train, X_test, y_train, y_test = train_test_split(training_np, result_np, test_size=0.2, random_state=109)  # 70% training and 30% test
-
-		print("SVC_Wrap")
-		self.SVC_Wrap(X_train, X_test, y_train, y_test,y_testProfit)
-		print("lSVC_Wrap")
-		self.lSVC_Wrap(X_train, X_test, y_train, y_test,y_testProfit)
-		print("boost_Wrap")
-		self.boost_Wrap(X_train, X_test, y_train, y_test,y_testProfit)
-		print("mlp_Wrap")
-		self.mlp_Wrap(X_train, X_test, y_train, y_test,y_testProfit)
-
-	def LS2_WeightingProductor(self):
-		print("LS2_WeightingProductor")
-
-		with open('training_data_with_c2fisets.txt', 'rb') as fp:
-			self.training_data_with_c2fisets = pickle.load(fp)
-		totalC2 = 0
-		kbins = []
-		for tdwc in self.training_data_with_c2fisets:
-			tdwc['c2'] = tdwc['cl']*tdwc['cw']
-			totalC2 = totalC2+tdwc['c2']
-			kbins.append(tdwc['c2'])
-		kbins_trans = preprocessing.KBinsDiscretizer(n_bins=[2], encode='ordinal')
-		ft = kbins_trans.fit_transform(np.array(kbins).reshape(-1, 1))
-
-
-		# c2 를 전체 c2에 나눈다.
-		checksum =0
-		i=0
-		for tdwc in self.training_data_with_c2fisets:
-			tdwc['c2'] = tdwc['c2']/totalC2 * 100
-			tdwc['w'] = ft[i][0]
-			i=i+1
-
-			checksum = checksum+tdwc['c2']
-
-		with open('training_data_with_c2fisets2.txt', 'wb') as fp:
-			pickle.dump(self.training_data_with_c2fisets, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 class StockClassficationV2:
+	arrayList = ['0405','0506','0607','0708','0809'
+						,'0910','1011','1112','1112',
+						'1213','1314','1415','1516',
+						'1617','1718']
+
 	def __init__(self):
 		print("__init__")
 	def prepareData_chart(self):
@@ -401,6 +89,170 @@ class StockClassficationV2:
 		with open('training_data_set_kbin', 'wb') as fp:
 			pickle.dump(training_set, fp, protocol=pickle.HIGHEST_PROTOCOL)
 		print("done")
+	def spliteData(self):
+
+
+		with open('training_data_set.txt', 'rb') as fp:
+			training_set = pickle.load(fp)
+		for al in self.arrayList:
+			training_data = np.empty([0, 70], dtype=int)
+			training_result = np.empty([0, 1], dtype=int)
+			for ts in training_set:
+				if al in ts: # test data
+					try:
+						if len(training_set[ts]["d"][0]) == 70:
+							training_data = np.append(training_data, np.array(training_set[ts]["d"]), axis=0)
+							training_result = np.append(training_result, np.array(training_set[ts]["r"]).reshape(1,1), axis=0)
+					except:
+						print("data is missing continue")
+			with open('training_data_'+al+'.txt', 'wb') as fp:
+				pickle.dump(training_data, fp, protocol=pickle.HIGHEST_PROTOCOL)
+			with open('training_result_'+al+'.txt', 'wb') as fp:
+				pickle.dump(training_result, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+
+
+		npa = np.empty([0, 70], dtype=int)
+		# 특정연도만 추려와서 스케일링 한다.
+
+	def training_dnn(self):
+
+		for a in self.arrayList:
+			with open('training_data_'+a+'.txt', 'rb') as fp:
+				training_data = pickle.load(fp)
+			with open('training_result_'+a+'.txt', 'rb') as fp:
+				training_result = pickle.load(fp)
+
+
+			scaler = preprocessing.RobustScaler().fit(training_data)
+			dump(scaler, 'scaler_'+a)
+
+			scaled_training_data = scaler.transform(training_data)
+
+
+			thrashhold_training_result = np.where(training_result >THRASH_HOLD,1,0)
+			model = self.build_DNN(training_data.shape[1])
+			model.fit(scaled_training_data, thrashhold_training_result, epochs=300, batch_size=10,verbose=0)
+			model.save('./model_'+a)
+			#print(model.evaluate(scaled_training_data,thrashhold_training_result))
+			#print((model.predict(scaled_training_data) > 0.5).astype(int))
+
+		
+		print("pause")
+
+	def build_fDNN(self,input):
+
+		model = Sequential()
+		model.add(Dense(512, activation='sigmoid', input_dim=input))
+		model.add(Dropout(0.2))
+		model.add(Dense(256, activation='relu'))
+		model.add(Dropout(0.2))
+		model.add(Dense(128, activation='sigmoid'))
+		model.add(Dropout(0.2))
+		model.add(Dense(128, activation='relu'))
+		model.add(Dropout(0.2))
+		model.add(Dense(64, activation='sigmoid'))
+		model.add(Dropout(0.2))
+		model.add(Dense(1,activation='sigmoid'))
+
+		#model.summary()
+
+		model.compile( optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+		return model
+
+	def build_DNN(self,input):
+
+		model = Sequential()
+		model.add(Dense(512, activation='sigmoid', input_dim=input))
+		model.add(Dropout(0.2))
+		model.add(Dense(128, activation='sigmoid'))
+		model.add(Dense(64, activation='relu'))
+		model.add(Dense(1,activation='sigmoid'))
+
+		#model.summary()
+
+		model.compile( optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+		return model
+	def build_training_set(self):
+
+		test_list = ['1415','1516','1617']
+		for alist in self.arrayList:
+			self.build_detail_training_set(alist)
+
+	def final_training_set(self,data, scalers, models):
+		# predict 해서 training set을 만든다.
+		mid_training_data = np.empty((data.shape[0], 0))
+		for alist in self.arrayList:
+			transformed_data = scalers[alist].transform(data)
+			mid_predicted_data = (models[alist].predict(transformed_data)>0.5).astype(int)
+			mid_training_data = np.hstack((mid_training_data, mid_predicted_data))
+		return mid_training_data
+	def build_detail_training_set(self, year):
+		training_data = np.empty([0, 70], dtype=int)
+		training_result = np.empty([0, 1], dtype=int)
+		test_data = np.empty([0, 70], dtype=int)
+		test_result = np.empty([0, 1], dtype=int)
+		model = self.build_DNN(training_data.shape[1])
+		scalers = {}
+		models = {}
+		# 해당년도를 제외하고 트레이닝 세트를 만든다.
+		for alist in self.arrayList:
+			if alist != year:
+				with open('training_data_'+alist+'.txt', 'rb') as fp:
+					td = pickle.load(fp)
+				with open('training_result_'+alist+'.txt', 'rb') as fp:
+					tr = pickle.load(fp)
+				training_data = np.append(training_data, td, axis=0)
+				training_result = np.append(training_result, tr, axis=0)
+				#  scaler 로드
+				scalers[alist] = load('scaler_' + str(alist))
+				models[alist] = keras.models.load_model('./model_'+str(alist))
+				
+
+			else:
+				with open('training_data_'+alist+'.txt', 'rb') as fp:
+					td = pickle.load(fp)
+				with open('training_result_'+alist+'.txt', 'rb') as fp:
+					tr = pickle.load(fp)
+				test_data = np.append(test_data, td, axis=0)
+				test_result = np.append(test_result, tr, axis=0)
+				scalers[alist] = load('scaler_' + str(alist))
+				models[alist] = keras.models.load_model('./model_'+str(alist))
+
+		final_training_data = self.final_training_set(training_data,scalers,models)
+		fmodel = self.build_fDNN(final_training_data.shape[1])
+		thrashhold_training_result = np.where(training_result > THRASH_HOLD, 1, 0)
+		fmodel.fit(final_training_data, thrashhold_training_result, epochs=2000, batch_size=150,verbose=0)
+
+
+
+
+		final_test_data = self.final_training_set(test_data, scalers, models)
+		thrashhold_test_result = np.where(test_result > THRASH_HOLD, 1, 0)
+		#print("test_result: ")
+		#print(thrashhold_test_result)
+		#print("predict_result: ")
+		#print((fmodel.predict(final_test_data)>0.5).astype(int))
+
+
+		print(str(year) + "year accrucy : " + str(fmodel.evaluate(final_test_data,thrashhold_test_result)[1]))
+		print("Precision:", metrics.precision_score(thrashhold_test_result, fmodel.predict(final_test_data)))
+		print("Recall:", metrics.recall_score(thrashhold_test_result, fmodel.predict(final_test_data)))
+		print("avg profit of "+str(year) + " is " + str(np.sum(thrashhold_test_result * test_result)/np.sum(thrashhold_test_result)))
+		print("profit of " + str(year) + " is ")
+		print(thrashhold_test_result * test_result)
+		print("selection count is " + str(np.sum(thrashhold_test_result)))
+
+
+
+
+
+
+		pass
+
 
 
 	def prepareData(self):
@@ -445,10 +297,16 @@ class StockClassficationV2:
 
 
 
+
+
 sc = StockClassficationV2()
 #sc.prepareData()
 #sc.prepareData_chart()
-sc.kbinData()
+#sc.kbinData()
+#sc.spliteData()
+#sc.training_dnn()
+sc.build_training_set()
+
 
 #sc.prepareData()
 #sc.LLS0_VarianceMaximizer()
