@@ -26,8 +26,8 @@ from tensorflow.python.keras.optimizers import Adam
 from sklearn.metrics import accuracy_score
 
 NUMBER_OF_FEATURE = 66
-THRASH_HOLD = 130
-
+THRASH_HOLD = 120
+RISK_FREE_RETURN = 102
 
 
 
@@ -225,26 +225,27 @@ class StockClassficationV2:
 		final_training_data = self.final_training_set(training_data,scalers,models)
 		fmodel = self.build_fDNN(final_training_data.shape[1])
 		thrashhold_training_result = np.where(training_result > THRASH_HOLD, 1, 0)
-		fmodel.fit(final_training_data, thrashhold_training_result, epochs=2000, batch_size=150,verbose=0)
+		fmodel.fit(final_training_data, thrashhold_training_result, epochs=3000, batch_size=150,verbose=0)
 
 
 
 
 		final_test_data = self.final_training_set(test_data, scalers, models)
 		thrashhold_test_result = np.where(test_result > THRASH_HOLD, 1, 0)
-		#print("test_result: ")
-		#print(thrashhold_test_result)
-		#print("predict_result: ")
-		#print((fmodel.predict(final_test_data)>0.5).astype(int))
 
-
+		final_test_result = (fmodel.predict(final_test_data) > 0.5).astype(int)
 		print(str(year) + "year accrucy : " + str(fmodel.evaluate(final_test_data,thrashhold_test_result)[1]))
-		print("Precision:", metrics.precision_score(thrashhold_test_result, fmodel.predict(final_test_data)))
-		print("Recall:", metrics.recall_score(thrashhold_test_result, fmodel.predict(final_test_data)))
-		print("avg profit of "+str(year) + " is " + str(np.sum(thrashhold_test_result * test_result)/np.sum(thrashhold_test_result)))
+		t = final_test_result * test_result
+		true_data = t[np.where(t != 0)[0]]
+		tp = np.sum(true_data > RISK_FREE_RETURN)/np.sum(final_test_result)
+		fp = np.sum(true_data < RISK_FREE_RETURN)/np.sum(final_test_result)
+		print("true positive:", tp)
+		print("false positive:", fp)
+		print("avg profit of "+str(year) + " is " + str(np.sum(final_test_result * test_result)/np.sum(final_test_result)))
 		print("profit of " + str(year) + " is ")
-		print(thrashhold_test_result * test_result)
-		print("selection count is " + str(np.sum(thrashhold_test_result)))
+		print("selection count is " + str(np.sum(final_test_result)))
+		print((final_test_result * test_result).transpose())
+
 
 
 
@@ -304,7 +305,7 @@ sc = StockClassficationV2()
 #sc.prepareData_chart()
 #sc.kbinData()
 #sc.spliteData()
-#sc.training_dnn()
+sc.training_dnn()
 sc.build_training_set()
 
 
