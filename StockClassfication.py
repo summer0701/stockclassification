@@ -24,18 +24,16 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.python.keras.optimizers import Adam
 from sklearn.metrics import accuracy_score
+from datetime import datetime
 
-NUMBER_OF_FEATURE = 66
-THRASH_HOLD = 120
+THRASH_HOLD = 130
 RISK_FREE_RETURN = 102
 
 
 
 class StockClassficationV2:
-	arrayList = ['0405','0506','0607','0708','0809'
-						,'0910','1011','1112','1112',
-						'1213','1314','1415','1516',
-						'1617','1718']
+
+	arrayList = ['0405','0506','0607','0708','0809','0910','1011','1112','1213','1314','1415','1516','1617','1718']
 
 	def __init__(self):
 		print("__init__")
@@ -133,7 +131,7 @@ class StockClassficationV2:
 
 			thrashhold_training_result = np.where(training_result >THRASH_HOLD,1,0)
 			model = self.build_DNN(training_data.shape[1])
-			model.fit(scaled_training_data, thrashhold_training_result, epochs=300, batch_size=10,verbose=0)
+			model.fit(scaled_training_data, thrashhold_training_result, epochs=3000, batch_size=10,verbose=0)
 			model.save('./model_'+a)
 			#print(model.evaluate(scaled_training_data,thrashhold_training_result))
 			#print((model.predict(scaled_training_data) > 0.5).astype(int))
@@ -147,13 +145,9 @@ class StockClassficationV2:
 		model.add(Dense(512, activation='sigmoid', input_dim=input))
 		model.add(Dropout(0.2))
 		model.add(Dense(256, activation='relu'))
-		model.add(Dropout(0.2))
-		model.add(Dense(128, activation='sigmoid'))
-		model.add(Dropout(0.2))
 		model.add(Dense(128, activation='relu'))
-		model.add(Dropout(0.2))
 		model.add(Dense(64, activation='sigmoid'))
-		model.add(Dropout(0.2))
+		model.add(Dense(32, activation='relu'))
 		model.add(Dense(1,activation='sigmoid'))
 
 		#model.summary()
@@ -177,10 +171,11 @@ class StockClassficationV2:
 
 		return model
 	def build_training_set(self):
+		self.f = open("{:%Y%m%d%H%M%S}".format(datetime.now()) + ".txt", 'w')
 
-		test_list = ['1415','1516','1617']
 		for alist in self.arrayList:
 			self.build_detail_training_set(alist)
+		self.f.close()
 
 	def final_training_set(self,data, scalers, models):
 		# predict 해서 training set을 만든다.
@@ -225,7 +220,7 @@ class StockClassficationV2:
 		final_training_data = self.final_training_set(training_data,scalers,models)
 		fmodel = self.build_fDNN(final_training_data.shape[1])
 		thrashhold_training_result = np.where(training_result > THRASH_HOLD, 1, 0)
-		fmodel.fit(final_training_data, thrashhold_training_result, epochs=3000, batch_size=150,verbose=0)
+		fmodel.fit(final_training_data, thrashhold_training_result, epochs=5000, batch_size=400,verbose=1)
 
 
 
@@ -234,17 +229,65 @@ class StockClassficationV2:
 		thrashhold_test_result = np.where(test_result > THRASH_HOLD, 1, 0)
 
 		final_test_result = (fmodel.predict(final_test_data) > 0.5).astype(int)
-		print(str(year) + "year accrucy : " + str(fmodel.evaluate(final_test_data,thrashhold_test_result)[1]))
+		txt = str(year) + "year accrucy : " + str(fmodel.evaluate(final_test_data,thrashhold_test_result)[1])
+		print(txt)
+		self.f.write(txt)
 		t = final_test_result * test_result
 		true_data = t[np.where(t != 0)[0]]
 		tp = np.sum(true_data > RISK_FREE_RETURN)/np.sum(final_test_result)
 		fp = np.sum(true_data < RISK_FREE_RETURN)/np.sum(final_test_result)
-		print("true positive:", tp)
-		print("false positive:", fp)
-		print("avg profit of "+str(year) + " is " + str(np.sum(final_test_result * test_result)/np.sum(final_test_result)))
-		print("profit of " + str(year) + " is ")
-		print("selection count is " + str(np.sum(final_test_result)))
-		print((final_test_result * test_result).transpose())
+		trade_set = 20
+		#print("set avg profit:", np.sum(test_result) / np.count_nonzero(test_result))
+		txt = "true positive:" + str(tp)
+		print(txt)
+		self.f.write(txt)
+		txt = "false positive:", str(fp)
+		print(txt)
+
+
+		# trader_set 이상으로 골랐을경우 수익률을 평균으로 나누고, 이하일때는 나머지부분을 0% 수익률로 채운다.
+		if np.sum(final_test_result) > trade_set:
+			txt = "trade > " + str(trade_set)
+			print(txt)
+			self.f.write(txt)
+			profit = str(np.sum(final_test_result * test_result)/np.sum(final_test_result))
+
+			txt = "avg profit of "+str(year) + " is " + str(profit)
+			print(txt)
+			self.f.write(txt)
+
+			txt = "profit of " + str(year) + " is "
+			print(txt)
+			self.f.write(txt)
+
+			txt = "selection count is " + str(np.sum(final_test_result))
+			print(txt)
+			self.f.write(txt)
+			txt = str((final_test_result * test_result).transpose())
+			print(txt)
+			self.f.write(txt)
+
+		else:
+			txt = "trade <  " + str(trade_set)
+			print(txt)
+			self.f.write(txt)
+
+			profit = str( (np.sum(final_test_result * test_result)+ (trade_set-np.sum(final_test_result))*100) / trade_set)
+			txt = "avg profit of "+str(year) + " is " + str(profit)
+			print(txt)
+			self.f.write(txt)
+
+			txt = "profit of " + str(year) + " is "
+			print(txt)
+			self.f.write(txt)
+
+			txt = "selection count is " + str(np.sum(final_test_result))
+			print(txt)
+			self.f.write(txt)
+
+			txt = str((final_test_result * test_result).transpose())
+			print(txt)
+			self.f.write(txt)
 
 
 
