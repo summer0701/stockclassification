@@ -238,37 +238,37 @@ class StockClassficationV2:
 		fp = np.sum(true_data < RISK_FREE_RETURN)/np.sum(final_test_result)
 		trade_set = 20
 		#print("set avg profit:", np.sum(test_result) / np.count_nonzero(test_result))
-		txt = "true positive:" + str(tp)
+		txt = "true positive:" + str(tp) + "\n"
 		print(txt)
 		self.f.write(txt)
-		txt = "false positive:", str(fp)
+		txt = "false positive:" + str(fp) + "\n"
 		print(txt)
 
 
 		# trader_set 이상으로 골랐을경우 수익률을 평균으로 나누고, 이하일때는 나머지부분을 0% 수익률로 채운다.
 		if np.sum(final_test_result) > trade_set:
-			txt = "trade > " + str(trade_set)
+			txt = "trade > " + str(trade_set) + "\n"
 			print(txt)
 			self.f.write(txt)
 			profit = str(np.sum(final_test_result * test_result)/np.sum(final_test_result))
 
-			txt = "avg profit of "+str(year) + " is " + str(profit)
+			txt = "avg profit of "+str(year) + " is " + str(profit) + "\n"
 			print(txt)
 			self.f.write(txt)
 
-			txt = "profit of " + str(year) + " is "
+			txt = "profit of " + str(year) + " is \n"
 			print(txt)
 			self.f.write(txt)
 
-			txt = "selection count is " + str(np.sum(final_test_result))
+			txt = "selection count is " + str(np.sum(final_test_result)) + "\n"
 			print(txt)
 			self.f.write(txt)
-			txt = str((final_test_result * test_result).transpose())
+			txt = str((final_test_result * test_result).transpose())+ "\n"
 			print(txt)
 			self.f.write(txt)
 
 		else:
-			txt = "trade <  " + str(trade_set)
+			txt = "trade <  " + str(trade_set) + "\n"
 			print(txt)
 			self.f.write(txt)
 
@@ -277,15 +277,15 @@ class StockClassficationV2:
 			print(txt)
 			self.f.write(txt)
 
-			txt = "profit of " + str(year) + " is "
+			txt = "profit of " + str(year) + " is \n"
 			print(txt)
 			self.f.write(txt)
 
-			txt = "selection count is " + str(np.sum(final_test_result))
+			txt = "selection count is " + str(np.sum(final_test_result)) + "\n"
 			print(txt)
 			self.f.write(txt)
 
-			txt = str((final_test_result * test_result).transpose())
+			txt = str((final_test_result * test_result).transpose())+ "\n"
 			print(txt)
 			self.f.write(txt)
 
@@ -348,7 +348,7 @@ sc = StockClassficationV2()
 #sc.prepareData_chart()
 #sc.kbinData()
 #sc.spliteData()
-sc.training_dnn()
+#sc.training_dnn()
 sc.build_training_set()
 
 
