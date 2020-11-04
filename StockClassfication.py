@@ -165,7 +165,7 @@ class StockClassficationV2:
 		model.add(Dense(64, activation='relu'))
 		model.add(Dense(1,activation='sigmoid'))
 
-		#model.summary()
+		model.summary()
 
 		model.compile( optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
@@ -236,7 +236,7 @@ class StockClassficationV2:
 		true_data = t[np.where(t != 0)[0]]
 		tp = np.sum(true_data > RISK_FREE_RETURN)/np.sum(final_test_result)
 		fp = np.sum(true_data < RISK_FREE_RETURN)/np.sum(final_test_result)
-		trade_set = 20
+		trade_set = 30
 		#print("set avg profit:", np.sum(test_result) / np.count_nonzero(test_result))
 		txt = "true positive:" + str(tp) + "\n"
 		print(txt)
@@ -348,8 +348,8 @@ sc = StockClassficationV2()
 #sc.prepareData_chart()
 #sc.kbinData()
 #sc.spliteData()
-#sc.training_dnn()
-sc.build_training_set()
+sc.training_dnn()
+#sc.build_training_set()
 
 
 #sc.prepareData()
