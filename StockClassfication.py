@@ -133,6 +133,8 @@ class StockClassficationV2:
 			model = self.build_DNN(training_data.shape[1])
 			model.fit(scaled_training_data, thrashhold_training_result, epochs=3000, batch_size=10,verbose=0)
 			model.save('./model_'+a)
+			#print("year : " + a)
+
 			#print(model.evaluate(scaled_training_data,thrashhold_training_result))
 			#print((model.predict(scaled_training_data) > 0.5).astype(int))
 
@@ -165,7 +167,7 @@ class StockClassficationV2:
 		model.add(Dense(64, activation='relu'))
 		model.add(Dense(1,activation='sigmoid'))
 
-		model.summary()
+		#model.summary()
 
 		model.compile( optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
@@ -220,7 +222,9 @@ class StockClassficationV2:
 		final_training_data = self.final_training_set(training_data,scalers,models)
 		fmodel = self.build_fDNN(final_training_data.shape[1])
 		thrashhold_training_result = np.where(training_result > THRASH_HOLD, 1, 0)
-		fmodel.fit(final_training_data, thrashhold_training_result, epochs=5000, batch_size=400,verbose=1)
+		fmodel.fit(final_training_data, thrashhold_training_result, epochs=5000, batch_size=400,verbose=0)
+		print("top stack training accuracy: " , fmodel.evaluate(final_training_data, thrashhold_training_result) )
+
 
 
 
@@ -236,7 +240,7 @@ class StockClassficationV2:
 		true_data = t[np.where(t != 0)[0]]
 		tp = np.sum(true_data > RISK_FREE_RETURN)/np.sum(final_test_result)
 		fp = np.sum(true_data < RISK_FREE_RETURN)/np.sum(final_test_result)
-		trade_set = 30
+		trade_set = 20
 		#print("set avg profit:", np.sum(test_result) / np.count_nonzero(test_result))
 		txt = "true positive:" + str(tp) + "\n"
 		print(txt)
@@ -345,11 +349,10 @@ class StockClassficationV2:
 
 sc = StockClassficationV2()
 #sc.prepareData()
-#sc.prepareData_chart()
-#sc.kbinData()
-#sc.spliteData()
-sc.training_dnn()
-#sc.build_training_set()
+#sc.training_dnn()
+sc.build_training_set()
+
+
 
 
 #sc.prepareData()

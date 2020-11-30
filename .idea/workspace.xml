@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand />
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dbcd2b7d-0a72-4b12-9d38-81bacfaeb7d8" name="Default Changelist" comment="v2 version update">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/stockp1.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104132.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104257.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104303.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104620.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104757.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030104840.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030105732.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030110013.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030110132.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030110631.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030112536.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030123316_20.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201030130156.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125102602.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125102828.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125104539.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125104927.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125114133.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125131106.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125131308.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125131540.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201125155808.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20201130091820.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GetCompositeStockIndexProfit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kospi+kosdaq.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sharperatio.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/평균상승률비교201027.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StockClassfication.py" beforeDir="false" afterPath="$PROJECT_DIR$/StockClassfication.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="BRANCH" value="master" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JupyterTrust" id="cdc56d7b-a97a-429c-a29f-b94f4e4dd395" />
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/stockp1.iml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+        <option value="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" />
+        <option value="$PROJECT_DIR$/.idea/other.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1avrMPBbO05oJCUQnJ9l2T4WTrE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\내 드라이브\2sandbox\stockp1" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.GetCompositeStockIndexProfit">
+    <configuration name="GetCompositeStockIndexProfit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GetCompositeStockIndexProfit.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PyStockGUI" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyStockGUI.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="StockClassfication" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DISPLAY" value="True" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/StockClassfication.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ajaxMulticaller" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ajaxMulticaller.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="consensus_finder" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/consensus_finder.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="kidpaper" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="stockp1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kidpaper" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.StockClassfication" />
+      <item itemvalue="Python.ajaxMulticaller" />
+      <item itemvalue="Python.consensus_finder" />
+      <item itemvalue="Python.kidpaper" />
+      <item itemvalue="Python.PyStockGUI" />
+      <item itemvalue="Python.GetCompositeStockIndexProfit" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.GetCompositeStockIndexProfit" />
+        <item itemvalue="Python.kidpaper" />
+        <item itemvalue="Python.consensus_finder" />
+        <item itemvalue="Python.PyStockGUI" />
+        <item itemvalue="Python.ajaxMulticaller" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dbcd2b7d-0a72-4b12-9d38-81bacfaeb7d8" name="Default Changelist" comment="" />
+      <created>1573177602067</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1573177602067</updated>
+      <workItem from="1573177609192" duration="522000" />
+      <workItem from="1573533875968" duration="156000" />
+      <workItem from="1573534055945" duration="199000" />
+      <workItem from="1573537136095" duration="2433000" />
+      <workItem from="1573540785240" duration="147000" />
+      <workItem from="1573541519410" duration="232000" />
+      <workItem from="1573541899056" duration="6903000" />
+      <workItem from="1573625863148" duration="8576000" />
+      <workItem from="1573695969405" duration="2548000" />
+      <workItem from="1573698633446" duration="7924000" />
+      <workItem from="1573711477307" duration="6940000" />
+      <workItem from="1574036370946" duration="15593000" />
+      <workItem from="1574059161193" duration="18042000" />
+      <workItem from="1574240260802" duration="753000" />
+      <workItem from="1576556022516" duration="2437000" />
+      <workItem from="1584008922710" duration="3069000" />
+      <workItem from="1584239072979" duration="1243000" />
+      <workItem from="1584242005972" duration="1076000" />
+      <workItem from="1584243216751" duration="640000" />
+      <workItem from="1584244035184" duration="21000" />
+      <workItem from="1587626482293" duration="16000" />
+      <workItem from="1587626544887" duration="83000" />
+      <workItem from="1587626868448" duration="20000" />
+      <workItem from="1587627175504" duration="135000" />
+      <workItem from="1596532448444" duration="2168000" />
+      <workItem from="1596546864650" duration="420000" />
+      <workItem from="1596586160055" duration="18767000" />
+      <workItem from="1596673910941" duration="1410000" />
+      <workItem from="1596764672286" duration="2678000" />
+      <workItem from="1597119470441" duration="1920000" />
+      <workItem from="1597122289121" duration="1985000" />
+      <workItem from="1597308060593" duration="1627000" />
+      <workItem from="1597710163193" duration="3657000" />
+      <workItem from="1597713875876" duration="5176000" />
+      <workItem from="1597796882337" duration="8377000" />
+      <workItem from="1598315138803" duration="7284000" />
+      <workItem from="1598328602539" duration="2622000" />
+      <workItem from="1598332714329" duration="384000" />
+      <workItem from="1601284809154" duration="343000" />
+      <workItem from="1601285160086" duration="363000" />
+      <workItem from="1602747881027" duration="194000" />
+      <workItem from="1602748102299" duration="4964000" />
+      <workItem from="1602815167364" duration="37000" />
+      <workItem from="1603066192046" duration="10327000" />
+      <workItem from="1603085791565" duration="643000" />
+      <workItem from="1603086978450" duration="2169000" />
+      <workItem from="1603092438182" duration="1634000" />
+      <workItem from="1603239128318" duration="3874000" />
+      <workItem from="1603266223032" duration="670000" />
+      <workItem from="1603270792991" duration="2000" />
+      <workItem from="1603325749509" duration="1911000" />
+      <workItem from="1603347860584" duration="597000" />
+      <workItem from="1603686468543" duration="3046000" />
+      <workItem from="1603689541022" duration="677000" />
+      <workItem from="1603690315271" duration="13406000" />
+      <workItem from="1603757747495" duration="10970000" />
+      <workItem from="1603776563684" duration="6061000" />
+      <workItem from="1603930091798" duration="2975000" />
+      <workItem from="1603936764594" duration="3811000" />
+      <workItem from="1604018954841" duration="9543000" />
+      <workItem from="1604277145680" duration="2625000" />
+      <workItem from="1604296143273" duration="12000" />
+      <workItem from="1604378878897" duration="1253000" />
+      <workItem from="1604391566070" duration="11000" />
+      <workItem from="1604451155612" duration="1199000" />
+      <workItem from="1604455970487" duration="7000" />
+      <workItem from="1604987700474" duration="17000" />
+      <workItem from="1604988179148" duration="1226000" />
+      <workItem from="1604989759330" duration="9000" />
+      <workItem from="1605053534557" duration="620000" />
+      <workItem from="1605057373549" duration="6000" />
+      <workItem from="1605487437773" duration="606000" />
+      <workItem from="1605587024263" duration="36000" />
+      <workItem from="1606267286503" duration="7522000" />
+      <workItem from="1606695381686" duration="4744000" />
+    </task>
+    <task id="LOCAL-00001" summary="추가">
+      <created>1596675281494</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1596675281494</updated>
+    </task>
+    <task id="LOCAL-00002" summary="추가">
+      <created>1597119733607</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597119733607</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add sands">
+      <created>1597119836828</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1597119836828</updated>
+    </task>
+    <task id="LOCAL-00004" summary="commit">
+      <created>1603761779005</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1603761779005</updated>
+    </task>
+    <task id="LOCAL-00005" summary="v2 version update">
+      <created>1603761992887</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1603761992887</updated>
+    </task>
+    <task id="LOCAL-00006" summary="v2 version update">
+      <created>1603775042727</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1603775042727</updated>
+    </task>
+    <task id="LOCAL-00007" summary="20201030">
+      <created>1604025544084</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1604025544084</updated>
+    </task>
+    <task id="LOCAL-00008" summary="202010302">
+      <created>1604030352185</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1604030352185</updated>
+    </task>
+    <task id="LOCAL-00009" summary="update">
+      <created>1604451271011</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604451271011</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="1" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="추가" />
+    <MESSAGE value="add sands" />
+    <MESSAGE value="add exefile" />
+    <MESSAGE value="LS2_WeightingProductor" />
+    <MESSAGE value="add classfications" />
+    <MESSAGE value="add stock classification" />
+    <MESSAGE value="add extra file" />
+    <MESSAGE value="delete extra file" />
+    <MESSAGE value="add kbins" />
+    <MESSAGE value="backup 20200923" />
+    <MESSAGE value="commit" />
+    <MESSAGE value="20201030" />
+    <MESSAGE value="202010302" />
+    <MESSAGE value="update" />
+    <MESSAGE value="v2 version update" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2 version update" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-1668" y="1417" key="#Notifications" timestamp="1603765840239">
+      <screen x="-2160" y="0" width="1440" height="2520" />
+    </state>
+    <state x="-1668" y="1417" key="#Notifications/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603765840239" />
+    <state x="873" y="342" key="#Plugins" timestamp="1602753094654">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="873" y="342" key="#Plugins/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1602753094654" />
+    <state x="-1981" y="1233" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603687643748">
+      <screen x="-2160" y="0" width="1440" height="2520" />
+    </state>
+    <state x="-1981" y="1233" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603687643748" />
+    <state x="1061" y="405" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1598336640555">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1061" y="405" key="#com.intellij.ide.macro.MacrosDialog/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1598336640555" />
+    <state x="961" y="436" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602748044748">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="961" y="436" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1602748044748" />
+    <state x="1011" y="443" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1598337222764">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1011" y="443" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1598337222764" />
+    <state x="898" y="266" key="CommitChangelistDialog2" timestamp="1598330617719">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="898" y="266" key="CommitChangelistDialog2/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1598330617719" />
+    <state width="928" height="832" key="DebuggerActiveHint" timestamp="1603688600027">
+      <screen x="-2160" y="0" width="1440" height="2520" />
+    </state>
+    <state width="928" height="832" key="DebuggerActiveHint/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603688600027" />
+    <state x="1146" y="460" key="EnvironmentVariablesDialog" timestamp="1598401610973">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1146" y="460" key="EnvironmentVariablesDialog/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1598401610973" />
+    <state x="663" y="803" key="FileChooserDialogImpl" timestamp="1604451515657">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="1179" y="446" key="FileChooserDialogImpl/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285398346" />
+    <state x="663" y="803" key="FileChooserDialogImpl/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1604451515657" />
+    <state x="3339" y="446" key="FileChooserDialogImpl/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1604386871388" />
+    <state x="-1497" y="803" key="FileChooserDialogImpl/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603761758653" />
+    <state x="1179" y="446" key="FileChooserDialogImpl/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603266294201" />
+    <state width="2516" height="478" key="GridCell.Tab.0.bottom" timestamp="1606699552509">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1342" height="266" key="GridCell.Tab.0.bottom/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285550137" />
+    <state width="2516" height="478" key="GridCell.Tab.0.bottom/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.0.bottom/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552509" />
+    <state width="1382" height="397" key="GridCell.Tab.0.bottom/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778381820" />
+    <state width="1382" height="475" key="GridCell.Tab.0.bottom/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622623" />
+    <state width="2516" height="478" key="GridCell.Tab.0.center" timestamp="1606699552509">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1342" height="266" key="GridCell.Tab.0.center/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285550137" />
+    <state width="2516" height="478" key="GridCell.Tab.0.center/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.0.center/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552509" />
+    <state width="1382" height="397" key="GridCell.Tab.0.center/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778381820" />
+    <state width="1382" height="475" key="GridCell.Tab.0.center/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622623" />
+    <state width="2516" height="478" key="GridCell.Tab.0.left" timestamp="1606699552509">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1342" height="266" key="GridCell.Tab.0.left/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285550137" />
+    <state width="2516" height="478" key="GridCell.Tab.0.left/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.0.left/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552509" />
+    <state width="1382" height="397" key="GridCell.Tab.0.left/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778381820" />
+    <state width="1382" height="475" key="GridCell.Tab.0.left/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622623" />
+    <state width="2516" height="478" key="GridCell.Tab.0.right" timestamp="1606699552509">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1342" height="266" key="GridCell.Tab.0.right/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285550137" />
+    <state width="2516" height="478" key="GridCell.Tab.0.right/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.0.right/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552509" />
+    <state width="1382" height="397" key="GridCell.Tab.0.right/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778381820" />
+    <state width="1382" height="475" key="GridCell.Tab.0.right/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622623" />
+    <state width="2516" height="478" key="GridCell.Tab.1.bottom" timestamp="1606699552405">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2516" height="478" key="GridCell.Tab.1.bottom/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.1.bottom/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552405" />
+    <state width="1382" height="475" key="GridCell.Tab.1.bottom/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778099388" />
+    <state width="1382" height="475" key="GridCell.Tab.1.bottom/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622624" />
+    <state width="2516" height="478" key="GridCell.Tab.1.center" timestamp="1606699552405">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2516" height="478" key="GridCell.Tab.1.center/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.1.center/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552405" />
+    <state width="1382" height="475" key="GridCell.Tab.1.center/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778099388" />
+    <state width="1382" height="475" key="GridCell.Tab.1.center/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622624" />
+    <state width="2516" height="478" key="GridCell.Tab.1.left" timestamp="1606699552405">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2516" height="478" key="GridCell.Tab.1.left/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.1.left/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552405" />
+    <state width="1382" height="475" key="GridCell.Tab.1.left/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778099388" />
+    <state width="1382" height="475" key="GridCell.Tab.1.left/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622623" />
+    <state width="2516" height="478" key="GridCell.Tab.1.right" timestamp="1606699552405">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2516" height="478" key="GridCell.Tab.1.right/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1606350797574" />
+    <state width="2516" height="478" key="GridCell.Tab.1.right/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606699552405" />
+    <state width="1382" height="475" key="GridCell.Tab.1.right/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603778099388" />
+    <state width="1382" height="475" key="GridCell.Tab.1.right/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603328622624" />
+    <state x="-1586" y="724" key="RollbackChangesDialog" timestamp="1603761614000">
+      <screen x="-2160" y="0" width="1440" height="2520" />
+    </state>
+    <state x="-1586" y="724" key="RollbackChangesDialog/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603761614000" />
+    <state x="1021" y="402" key="RollbackChangesDialog/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1600848025167" />
+    <state x="310" y="1014" width="914" height="1013" key="SettingsEditor" timestamp="1605487564728">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="335" y="357" width="996" height="707" key="SettingsEditor/-2160.0.1440.2520/0.0.2560.1400@0.0.2560.1400" timestamp="1601285541572" />
+    <state x="310" y="1014" key="SettingsEditor/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1605487564728" />
+    <state x="-1850" y="1014" width="914" height="1013" key="SettingsEditor/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603761760241" />
+    <state x="335" y="315" key="SettingsEditor/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1598401768075" />
+    <state x="557" y="763" key="Vcs.Push.Dialog.v2" timestamp="1604451753411">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="557" y="763" key="Vcs.Push.Dialog.v2/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1604451753411" />
+    <state x="991" y="424" key="Vcs.Push.Dialog.v2/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1600848302589" />
+    <state width="1288" height="708" key="XDebugger.FullValuePopup" timestamp="1606696010094">
+      <screen x="2160" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1288" height="708" key="XDebugger.FullValuePopup/0.0.1440.2520/2160.0.2560.1400@2160.0.2560.1400" timestamp="1606696010094" />
+    <state width="724" height="1273" key="XDebugger.FullValuePopup/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603084299976" />
+    <state width="1287" height="707" key="XDebugger.FullValuePopup/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1600050495070" />
+    <state x="892" y="311" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1603239160450">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="892" y="311" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1603239160450" />
+    <state x="616" y="1285" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1604451675217">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="616" y="1285" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1604451675217" />
+    <state x="-1589" y="1507" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603761713299">
+      <screen x="-2160" y="0" width="1440" height="2520" />
+    </state>
+    <state x="-1589" y="1507" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2560.1400/-2160.0.1440.2520@-2160.0.1440.2520" timestamp="1603761713299" />
+    <state x="523" y="1451" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1604451704351">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="523" y="1451" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1604451704351" />
+    <state x="937" y="331" key="run.anything.popup" timestamp="1599527059772">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="937" y="331" key="run.anything.popup/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1599527059772" />
+    <state x="530" y="562" width="672" height="1210" key="search.everywhere.popup" timestamp="1604296154162">
+      <screen x="0" y="0" width="1440" height="2520" />
+    </state>
+    <state x="530" y="562" width="672" height="1210" key="search.everywhere.popup/0.0.1440.2520/2160.0.2560.1400@0.0.1440.2520" timestamp="1604296154162" />
+    <state x="943" y="312" width="672" height="672" key="search.everywhere.popup/0.0.2560.1400/-2160.0.1440.2520@0.0.2560.1400" timestamp="1600848148339" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dart_financial_statement.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/StockClassfication.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="yp" language="Python" />
+        <watch expression="oldyear" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/stockp1$GetCompositeStockIndexProfit.coverage" NAME="GetCompositeStockIndexProfit Coverage Results" MODIFIED="1606699552390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/stockp1$StockClassfication.coverage" NAME="StockClassfication Coverage Results" MODIFIED="1606695497030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

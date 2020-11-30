@@ -1,0 +1,14 @@
+	Line 6: avg profit of 0405 is   120.23913043478261   1359-1360 100
+	Line 23: avg profit of 0506 is  142.96969696969697   1452-1897 133
+	Line 40: avg profit of 0607 is  81.2                 1711-1063  62
+	Line 58: avg profit of 0708 is  151.04255319148936   1206-1682  139
+	Line 76: avg profit of 0809 is  142.42857142857142   1594-2051 128
+	Line 95: avg profit of 0910 is  104.8                1939-1825  94
+	Line 115: avg profit of 1011 is 109.65384615384616   2030-1997  98
+	Line 136: avg profit of 1112 is 108.87878787878788   2026-2011  99
+	Line 206: avg profit of 1213 is 108.94285714285714   1979-1915  96.7
+	Line 227: avg profit of 1314 is 116.41666666666667   1985-1961  98
+	Line 248: avg profit of 1415 is 105.0754716981132    2003-2026  101
+	Line 270: avg profit of 1516 is 130.80769230769232   2091-2467  117
+	Line 292: avg profit of 1617 is 96.6                 2427-2166  89
+	Line 315: avg profit of 1718 is 147.7826086956522    2195-2197  100
